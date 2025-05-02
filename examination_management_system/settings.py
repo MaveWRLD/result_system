@@ -10,7 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 
-from pathlib import Path
+from pathlib import Path 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -20,7 +20,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-se4k!c4h9aosy8#8u)oyis!5o(-6nrwwe4*b0y%2o**#l20uq-'
+SECRET_KEY = 'django-insecure-989xhmri0nk1ty5^be8xs6-8lpx3vg72)lgztf-$d&5*iiq@ps'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -37,16 +37,25 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'debug_toolbar',
+    #app
+    'audit',
+    'result_system',
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+]
+
+INTERNAL_IPS = [
+    '127.0.0.1'
 ]
 
 ROOT_URLCONF = 'examination_management_system.urls'
@@ -74,8 +83,11 @@ WSGI_APPLICATION = 'examination_management_system.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'examination_management_system',
+        'HOST': 'localhost',
+        'USER': 'root',
+        'PASSWORD': 'kofi1yaw',
     }
 }
 
@@ -97,6 +109,9 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
+
+AUTH_USER_MODEL = 'result_system.User'
+
 
 
 # Internationalization
