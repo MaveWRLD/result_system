@@ -29,19 +29,30 @@ class User(AbstractUser):
         return f'{self.username}'
 
 class Course(models.Model):
+    SEMESTER_CHOICES = [
+        ("FIRST", "First"),
+        ("SECOND", "Second")
+    ]
     course_name = models.CharField(max_length=100, unique=True)
     course_code = models.CharField(max_length=10, unique=True)
+    credit_hours = models.PositiveIntegerField(validators=[MinValueValidator(1), MaxValueValidator(3)])
+    semester_offered = models.CharField(max_length=50, choices=SEMESTER_CHOICES)
     lecturer = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True,
                                   limit_choices_to={'role':'L'})
     department = models.ForeignKey(Department, on_delete=models.CASCADE)
 
 class Result(models.Model):
+    STATUS_CHOICES = [
+        ("D", "Draft"),
+        ("P", "Published")
+    ]
     student = models.ForeignKey(User, on_delete=models.CASCADE,
                                 limit_choices_to={'role':'S'})
     course = models.ForeignKey(Course, on_delete=models.CASCADE)
-    grade = models.DecimalField(max_digits=5, decimal_places=2,
+    score = models.DecimalField(max_digits=5, decimal_places=2,
                                 validators = [MinValueValidator(0), MaxValueValidator(100)])
     semester = models.CharField(max_length=20)
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default="D")
     is_archived = models.BooleanField(default=False)
     created_by = models.ForeignKey(User, on_delete=models.SET_NULL, 
                                   null=True, blank=True, limit_choices_to={'role':'L'}, related_name='created_results')

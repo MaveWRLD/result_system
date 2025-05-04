@@ -23,7 +23,7 @@ class UserAdmin(admin.ModelAdmin):
 
 @admin.register(models.Course)
 class CourseAdmin(admin.ModelAdmin):
-    list_display = ['course_name', 'course_code', 'lecturer', 'department']
+    list_display = ['course_name', 'course_code', 'credit_hours', 'semester_offered','lecturer', 'department']
     list_filter = ['course_name', 'department', 'lecturer']
     ordering = ['department']
     search_fields = ['course_name__istartwith', 'lecturer_istartwith']
@@ -31,7 +31,7 @@ class CourseAdmin(admin.ModelAdmin):
 
 @admin.register(models.Result)
 class ResultAdmin(admin.ModelAdmin):
-    list_display = ['student', 'course', 'grade', 'semester', 'is_archived', 'created_by', 'created_at', 'updated_at']
+    list_display = ['student', 'course', 'score', 'semester', 'status', 'is_archived', 'created_by', 'created_at', 'updated_at']
     list_filter = ['course', 'created_by', 'created_at']
     list_select_related = ['student', 'course', 'created_by']
     ordering = ['course']
