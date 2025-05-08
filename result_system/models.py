@@ -57,7 +57,7 @@ class Result(models.Model):
     created_by = models.ForeignKey(User, on_delete=models.SET_NULL, 
                                   null=True, blank=True, limit_choices_to={'role':'L'}, related_name='created_results')
     created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
+    updated_at = models.DateTimeField(auto_now=True, null=True, blank=True)
     
     class Meta:
         permissions = [
