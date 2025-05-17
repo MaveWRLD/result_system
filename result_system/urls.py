@@ -1,14 +1,14 @@
-from django.urls import path
-from rest_framework.routers import DefaultRouter
-from . import views
-
-router = DefaultRouter()
-router.register('departments', views.DepartmentViewSet)
-router.register('users', views.UserViewSet)
-router.register('courses', views.CourseViewSet)
-router.register('results', views.ResultViewSet)
-
-urlpatterns = router.urls
+#from django.urls import path
+#from rest_framework.routers import DefaultRouter
+#from . import views
+#
+#router = DefaultRouter()
+#router.register('departments', views.DepartmentViewSet)
+#router.register('users', views.UserViewSet)
+#router.register('courses', views.CourseViewSet)
+#router.register('results', views.ResultViewSet)
+#
+#urlpatterns = router.urls
 #[
 #    #result_url_api_endpoints
 #    path('results/', views.ResultList.as_view()),

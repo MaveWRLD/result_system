@@ -38,9 +38,10 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'debug_toolbar',
-     'rest_framework',
+    'rest_framework',
+    'core',
     #app
-    'audit',
+    #'audit',
     'result_system',
 ]
 
@@ -111,7 +112,7 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-AUTH_USER_MODEL = 'result_system.User'
+AUTH_USER_MODEL = 'core.User'
 
 
 
