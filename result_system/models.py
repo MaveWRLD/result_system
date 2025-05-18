@@ -16,6 +16,8 @@ class Profile(models.Model):
     department = models.ForeignKey(Department, on_delete=models.CASCADE, related_name='students')
     phone = models.CharField(max_length=10)
 
+    def __str__(self):
+        return f'{self.user.username}'
 
 class Course(models.Model):
     SEMESTER_CHOICES = [
@@ -28,13 +30,16 @@ class Course(models.Model):
                                                 MaxValueValidator(3)])
     semester_offered = models.CharField(max_length=50, choices=SEMESTER_CHOICES)
     lecturer = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL,
-                                null=True, blank=True, limit_choices_to={'role':'L'},
+                                null=True, blank=True,
                                 related_name='course')
     department = models.ForeignKey(Department, on_delete=models.CASCADE)
 
+    def __str__(self):
+        return f'{self.course_name}'
+
 class Result(models.Model):
     STATUS_CHOICES = [
-        ("I", "In active"),
+        ("I", "In-Active"),
         ("IC", "In-Complete"),
         ("WL", "With Lecturer"),
         ("D", "Department"),
@@ -42,20 +47,25 @@ class Result(models.Model):
     ]
     course = models.ForeignKey(Course, on_delete=models.CASCADE)
     student = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE,
-                                limit_choices_to={'role':'S'}, related_name='student_results')
+                                related_name='student_results')
     score = models.DecimalField(max_digits=5, decimal_places=2,
                                 validators = [MinValueValidator(0), MaxValueValidator(100)])
     author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL,
-                                null=True, blank=True, limit_choices_to={'role':'L'},
+                                null=True, blank=True,
                                 related_name='authored_results')
     is_archived = models.BooleanField(default=False)
+    is_locked = models.BooleanField(default=False)
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default="I")
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True, null=True, blank=True)
 
-
-    #def __str__(self):
-    #    return f"{self.student.username}'s grade {self.grade} in {self.course.course_code}"
+    class Meta:
+        permissions = [
+            ('lock_results', 'Results Locked by Exam Officer'),
+            ('unlock_results', 'Results Unlocked by Exam Officer')
+        ]
+    def __str__(self):
+        return f"{self.student.username}'s grade {self.score} in {self.course.course_code}"
 
 
 # Create your models here.

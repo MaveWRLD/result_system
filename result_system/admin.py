@@ -24,7 +24,7 @@ class CourseAdmin(admin.ModelAdmin):
 class ResultAdmin(admin.ModelAdmin):
     list_display = ['student', 'course', 'score', 'status', 'is_archived', 'author', 'created_at', 'updated_at']
     list_filter = ['course', 'author', 'created_at']
-    list_select_related = ['student', 'course', 'created_by']
+    list_select_related = ['student', 'course', 'author']
     ordering = ['course']
     search_fields = ['course__istartwith']
     autocomplete_fields = ['student', 'course', 'author']

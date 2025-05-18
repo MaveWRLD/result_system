@@ -21,5 +21,5 @@ from django.urls import path, include
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('_debug_/', include(debug_toolbar.urls)),
-    #path('result_system/', include('result_system.urls')),
+    path('result_system/', include('result_system.urls')),
 ]
