@@ -1,0 +1,13 @@
+permissions: Lecturer
+create results
+enter results score
+edit results score 
+
+permissions: Exam officer
+view course results
+edit course results
+lock course results
+unlock course results
+
+permissions: Dean
+release results-
