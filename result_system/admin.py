@@ -36,7 +36,7 @@ class CourseAdmin(admin.ModelAdmin):
 
 class AssessmentScoreInline(admin.TabularInline):
     model = models.Assessment
-    fields = ['result', 'student', 'ca_slot1', 'ca_slot2', 'ca_slot3', 'ca_slot4', 'exam_mark', 'is_approved']
+    fields = ['result', 'student', 'ca_slot1', 'ca_slot2', 'ca_slot3', 'ca_slot4', 'exam_mark']
     list_select_related = ['result', 'student']
     search_fields = ['result__course__istartwith', 'student__name__istartwith']
     autocomplete_fields = ['result', 'student']
