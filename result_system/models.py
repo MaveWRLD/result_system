@@ -145,32 +145,32 @@ class Assessment(models.Model):
     ca_slot2 = models.DecimalField(max_digits=5, decimal_places=2, null=True, blank=True)
     ca_slot3 = models.DecimalField(max_digits=5, decimal_places=2, null=True, blank=True)
     ca_slot4 = models.DecimalField(max_digits=5, decimal_places=2, null=True, blank=True)
-    exam_mark = models.DecimalField(max_digits=5, decimal_places=2)
+    exam_mark = models.DecimalField(max_digits=5, decimal_places=2, null=True, blank=True)
 
     class Meta:
         unique_together = ['result', 'student']
 
-    def clean(self):
-        # Validate CA marks sum <= 40
-        ca_marks = [self.ca_slot1, self.ca_slot2, self.ca_slot3, self.ca_slot4]
-        valid_marks = [m for m in ca_marks if m is not None]
-        
-        if sum(valid_marks) > 40:
-            raise ValidationError("Total CA marks cannot exceed 40")
-            
-        if self.exam_mark > 60:
-            raise ValidationError("Exam marks cannot exceed 60")
-            
-        # Ensure student is enrolled in the course
-        if not Enrollment.objects.filter(
-            student=self.student, 
-            course=self.result.course
-        ).exists():
-            raise ValidationError("Student is not enrolled in this course")
-
-    def save(self, *args, **kwargs):
-        self.full_clean()
-        super().save(*args, **kwargs)
+    #def clean(self):
+    #    # Validate CA marks sum <= 40
+    #    ca_marks = [self.ca_slot1, self.ca_slot2, self.ca_slot3, self.ca_slot4]
+    #    valid_marks = [m for m in ca_marks if m is not None]
+    #    
+    #    if sum(valid_marks) > 40:
+    #        raise ValidationError("Total CA marks cannot exceed 40")
+    #        
+    #    if self.exam_mark > 60:
+    #        raise ValidationError("Exam marks cannot exceed 60")
+    #        
+    #    # Ensure student is enrolled in the course
+    #    if not Enrollment.objects.filter(
+    #        student=self.student, 
+    #        course=self.result.course
+    #    ).exists():
+    #        raise ValidationError("Student is not enrolled in this course")
+#
+    #def save(self, *args, **kwargs):
+    #    self.full_clean()
+    #    super().save(*args, **kwargs)
 
     def __str__(self):
         return f"{self.student.name} - {self.result.course.code}"
@@ -187,7 +187,7 @@ class SubmittedResult(models.Model):
     lecturer = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
 
 class SubmittedResultScore(models.Model):
-    submitted_result = models.ForeignKey(SubmittedResult, on_delete=models.CASCADE)
+    submitted_result = models.ForeignKey(SubmittedResult, on_delete=models.CASCADE, related_name='result_scores')
     student = models.ForeignKey(Student, on_delete=models.CASCADE, related_name='students_score')
     ca_slot1 = models.DecimalField(max_digits=5, decimal_places=2, null=True, blank=True)
     ca_slot2 = models.DecimalField(max_digits=5, decimal_places=2, null=True, blank=True)
