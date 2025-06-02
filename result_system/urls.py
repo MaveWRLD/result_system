@@ -4,7 +4,7 @@ from . import views
 
 router = DefaultRouter()
 router.register('courses', views.CourseViewSet, basename='course')
-router.register('submitted_results', views.SubmittedResultViewSet)
+router.register('submitted_results', views.SubmittedResultViewSet, basename='submitted_result')
 #router.register('results', views.ResultViewSet, basename='result')
 #router.register('assessments', views.AssessmentViewSet)
 
