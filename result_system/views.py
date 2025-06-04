@@ -1,17 +1,13 @@
-from django.shortcuts import get_object_or_404
 from django.contrib.auth import get_user_model
 from django_filters.rest_framework import DjangoFilterBackend
-from django.db import connection
-from rest_framework.decorators import action
-from rest_framework.response import Response
 from rest_framework.decorators import action
 from rest_framework.mixins import ListModelMixin, UpdateModelMixin, RetrieveModelMixin, CreateModelMixin
 from rest_framework.viewsets import GenericViewSet, ModelViewSet, ReadOnlyModelViewSet
 from rest_framework.permissions import DjangoModelPermissions
 from .models import  Course, Result, Assessment, SubmittedResult, SubmittedResultScore
 from .serializers import AssessmentSerializer, CourseSerializer, SubmitResultSerializer, SubmittedResultSerializer,  UserSerializer, ResultSerializer, SubmittedResultScoreSerializer
-from .permissions import IsDRO, IsAdminOrReadOnly, IsCourseLecturer
-#from .filters import ResultFilter
+from .permissions import  IsAdminOrReadOnly
+
 
 User = get_user_model()
 
