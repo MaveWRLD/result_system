@@ -12,6 +12,14 @@ class DepartmentAdmin(admin.ModelAdmin):
     search_fields = ['name', 'faculty']
     autocomplete_fields = ['faculty']
 
+@admin.register(models.Profile)
+class ResultAdmin(admin.ModelAdmin):
+    list_display = ['user', 'department']
+    list_filter = ['department']
+    list_select_related = ['user']
+    search_fields = ['department']
+    autocomplete_fields = ['user','department']
+
 @admin.register(models.Program)
 class ProgramAdmin(admin.ModelAdmin):
     list_display = ['name', 'department']
