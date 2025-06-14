@@ -77,6 +77,7 @@ class SubmitResultSerializer(serializers.Serializer):
             SubmittedResultScore.objects.bulk_create(submitted_result_score)
             Result.objects.filter(id=result_id).delete()
 
+
 class SubmittedResultSerializer(serializers.ModelSerializer):
     class Meta:
         model = SubmittedResult
@@ -84,10 +85,18 @@ class SubmittedResultSerializer(serializers.ModelSerializer):
 
 
 class SubmittedResultScoreSerializer(serializers.ModelSerializer):
-   class Meta:
-       model = SubmittedResultScore
-       fields = ['id', 'submitted_result_id', 'student',
-                 'ca_slot1', 'ca_slot2', 'ca_slot3', 'ca_slot4', 'exam_mark']
+    class Meta:
+        model = SubmittedResultScore
+        fields = ['id', 'submitted_result_id', 'student_id',
+                  'ca_slot1', 'ca_slot2', 'ca_slot3', 'ca_slot4', 'exam_mark']
+
+    def create(self, validated_data):
+        result_id = self.context['submitted_result_id']
+        return Assessment.objects.create(result_id=result_id, **validated_data)
+
+
+
+
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:

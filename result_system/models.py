@@ -128,13 +128,15 @@ class Assessment(models.Model):
     
 class SubmittedResult(models.Model):
     RESULT_STATUS = [
-        ('P', 'Pending'),
+        ('D', 'Draft'),
+        ('P_D', 'Pending Department'),
+        ('P_F', 'Pending Faculty'),
         ('A', 'Approved'),
         ('R', 'Rejected'),
 
     ]
     submitted_at = models.DateField(auto_now_add=True)
-    result_status = models.CharField(max_length=50, choices=RESULT_STATUS, default='P')
+    result_status = models.CharField(max_length=50, choices=RESULT_STATUS, default='D')
     lecturer = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
 
 class SubmittedResultScore(models.Model):
