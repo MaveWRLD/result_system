@@ -7,6 +7,8 @@ class User(AbstractUser):
     is_lecturer = models.BooleanField(default=False)
     is_dro = models.BooleanField(default=False)
     is_fro = models.BooleanField(default=False)
+    is_co = models.BooleanField(default=False)
+
 
     
 
