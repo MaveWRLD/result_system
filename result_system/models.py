@@ -4,6 +4,9 @@ from django.conf import settings
 from django.forms import ValidationError
 from django.core.exceptions import ValidationError
 
+
+
+
 class Faculty(models.Model):
     name = models.CharField(max_length=255, unique=True)
 
@@ -16,64 +19,12 @@ class Department(models.Model):
 
     def __str__(self):
         return self.name
-
-class Role(models.Model):
-    ROLES = [
-        ('L', 'Lecturer'),
-        ('DRO', 'Department Results Officer'),
-        ('FRO', 'Faculty Results Officer'),
-        ('CO', 'Corrections Officer'),
-    ]
-    name = models.CharField(max_length=50, choices=ROLES, unique=True)
-
-    def __str__(self):
-        return self.get_name_display()
-
-
-class UserRole(models.Model):
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='user_roles')
-    role = models.ForeignKey(Role, on_delete=models.CASCADE)
-    department = models.ForeignKey(Department, on_delete=models.CASCADE, null=True, blank=True)
-    faculty = models.ForeignKey(Faculty, on_delete=models.CASCADE, null=True, blank=True)
-
-    class Meta:
-        constraints = [
-            models.UniqueConstraint(
-                fields=['user', 'role'],
-                name = 'unique_user_role_assignment'
-            )
-        ]
-
-
-    def clean(self):
-        role_name = self.role.name if self.role else None
-        
-        # DRO must have department, no faculty
-        if role_name == 'DRO':
-            if not self.department:
-                raise ValidationError({'department': 'Department is required for DRO role'})
-            if self.faculty:
-                raise ValidationError({'faculty': 'DRO cannot be associated with a faculty'})
-
-        # FRO must have faculty, no department
-        elif role_name == 'FRO':
-            if not self.faculty:
-                raise ValidationError({'faculty': 'Faculty is required for FRO role'})
-            if self.department:
-                raise ValidationError({'department': 'FRO cannot be associated with a department'})
-
-        # Other roles (Lecturer/Corrections Officer) have no associations
-        else:
-            if self.department or self.faculty:
-                raise ValidationError('Only DRO/FRO roles can have department/faculty associations')
-
-    def save(self, *args, **kwargs):
-        self.full_clean()  # Enforce validation on save
-        super().save(*args, **kwargs)
-
-    def __str__(self):
-        return f"{self.user.email} - {self.role.get_name_display()}"
     
+class Profile(models.Model):
+    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='profiles')
+    department = models.ForeignKey(Department, on_delete=models.CASCADE, null=True, blank=True)
+
+
 class Program(models.Model):
     name = models.CharField(max_length=255, unique=True)
     department = models.ForeignKey(Department, on_delete=models.CASCADE)
@@ -198,7 +149,7 @@ class SubmittedResultScore(models.Model):
 
 class ResultModificationLog(models.Model):
     result = models.ForeignKey(Result, on_delete=models.CASCADE, related_name="modification_logs")
-    modified_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True, limit_choices_to={'role':'CO'})
+    modified_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True)
     old_data = models.JSONField()  # Stores previous CA/exam values
     new_data = models.JSONField()
     reason = models.TextField()

@@ -23,16 +23,36 @@ class IsAdminOrReadOnly(permissions.BasePermission):
 
 
 class IsFRO(HasRole):
-    required_roles = 'FRO'
+    message = "You do not have permission to perform this action"
+    required_roles = []
+
+    def has_permission(self, request, view):
+        user = request.user
+        if not user or not user.is_authenticated:
+            return False
+        return user.is_fro
 
 
 class IsCO(HasRole):
-    required_roles = 'CO'
+    message = "You do not have permission to perform this action"
+    required_roles = []
+
+    def has_permission(self, request, view):
+        user = request.user
+        if not user or not user.is_authenticated:
+            return False
+        return user.is_co
 
 
 class IsDRO(permissions.BasePermission):
+    message = "You do not have permission to perform this action"
+    required_roles = []
+
     def has_permission(self, request, view):
-        return request.user.in_group('result_system.DRO')
+        user = request.user
+        if not user or not user.is_authenticated:
+            return False
+        return user.is_dro
     
 
 class IsCourseLecturer(permissions.BasePermission):

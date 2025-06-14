@@ -4,12 +4,16 @@ from .models import User
 
 @admin.register(User)
 class UserAdmin(BaseUserAdmin):
-    list_display = ['first_name', 'last_name', 'username']
+    list_display = ['first_name', 'last_name', 'is_lecturer', 'is_dro', 'is_fro', 'username']
+    fieldsets = BaseUserAdmin.fieldsets + (
+        (("UserRoles info"), {"fields": ('is_lecturer', 'is_dro', 'is_fro',)}),        
+    )
     add_fieldsets = (
         (None, {
             'classes':('wide'),
             'fields':('username', 'password1', 'password2', 
-                      'email', 'first_name', 'last_name'),
+                      'email', 'first_name', 'last_name' ,
+                       'is_lecturer', 'is_dro', 'is_fro'),
         }),
     )
 # Register your models here.

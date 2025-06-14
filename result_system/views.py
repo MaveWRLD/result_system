@@ -61,10 +61,14 @@ class SubmittedResultViewSet(ModelViewSet):
 
     def get_queryset(self):
         user = self.request.user
-        dro_role = user.user_roles.filter(role__name='DRO').first()
-        lecturer_roles = user.user_roles.filter(role__name='L')
-        if dro_role and dro_role.department:
-            return SubmittedResult.objects.filter(result_scores__student__program__department=dro_role.department)
+        dro_role = user.is_dro
+        fro_role = user.is_fro
+        print(type(dro_role))
+        lecturer_roles = user.is_lecturer
+        if dro_role:
+            return SubmittedResult.objects.filter(lecturer__profiles__department=user.profiles.department, result_status='P')
+        if fro_role:
+            return SubmittedResult.objects.filter(lecturer__profiles__department__faculty=user.profiles.department.faculty, result_status='A')
         elif lecturer_roles:
             return SubmittedResult.objects.filter(lecturer=user.id)
         
