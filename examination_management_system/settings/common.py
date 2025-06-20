@@ -38,6 +38,8 @@ INSTALLED_APPS = [
     'django_filters',
     'djoser',
     'drf_spectacular',
+    "corsheaders",
+
     # app
     # 'audit',
     'core',
@@ -46,6 +48,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    "corsheaders.middleware.CorsMiddleware",
     'whitenoise.middleware.WhiteNoiseMiddleware',
     'debug_toolbar.middleware.DebugToolbarMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -58,6 +61,11 @@ MIDDLEWARE = [
 
 INTERNAL_IPS = [
     '127.0.0.1'
+]
+
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:8080",
+    "http://127.0.0.1:9000",
 ]
 
 ROOT_URLCONF = 'examination_management_system.urls'

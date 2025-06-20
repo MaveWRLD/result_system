@@ -16,8 +16,9 @@ python-decouple = "*"
 whitenoise = "*"
 gunicorn = "*"
 drf-spectacular = "*"
+django-cors-headers = "*"
 
 [dev-packages]
 
 [requires]
-python_version = "3.13"
+python_version = "*"
