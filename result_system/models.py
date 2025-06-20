@@ -29,25 +29,22 @@ class Program(models.Model):
     name = models.CharField(max_length=255, unique=True)
     department = models.ForeignKey(Department, on_delete=models.CASCADE)
 
-
-    # Optional: Add program code (e.g., "CS101")
-
     def __str__(self):
         return self.name
     
     
 class Student(models.Model):
-    student_id = models.CharField(max_length=20, unique=True)  # e.g., "STD-2025-001"
+    student_id = models.CharField(max_length=20, unique=True)
     name = models.CharField(max_length=255)
     email = models.EmailField(unique=True)
     program = models.ForeignKey(Program, on_delete=models.CASCADE)
-    enrollment_year = models.IntegerField()  # e.g., 2025
+    enrollment_year = models.IntegerField() 
 
     def __str__(self):
         return f"{self.student_id} - {self.name}"
 
 class Course(models.Model):
-    code = models.CharField(max_length=20, unique=True)  # e.g., "CS101"
+    code = models.CharField(max_length=20, unique=True) 
     name = models.CharField(max_length=255)
     program = models.ForeignKey(Program, on_delete=models.CASCADE)
     credit = models.PositiveBigIntegerField(validators=[MinValueValidator(1), MaxValueValidator(3)])
@@ -101,7 +98,7 @@ class Assessment(models.Model):
     class Meta:
         unique_together = ['result', 'student']
 
-    #def clean(self):
+    def clean(self):
     #    # Validate CA marks sum <= 40
     #    ca_marks = [self.ca_slot1, self.ca_slot2, self.ca_slot3, self.ca_slot4]
     #    valid_marks = [m for m in ca_marks if m is not None]
@@ -112,16 +109,16 @@ class Assessment(models.Model):
     #    if self.exam_mark > 60:
     #        raise ValidationError("Exam marks cannot exceed 60")
     #        
-    #    # Ensure student is enrolled in the course
-    #    if not Enrollment.objects.filter(
-    #        student=self.student, 
-    #        course=self.result.course
-    #    ).exists():
-    #        raise ValidationError("Student is not enrolled in this course")
-#
-    #def save(self, *args, **kwargs):
-    #    self.full_clean()
-    #    super().save(*args, **kwargs)
+        # Ensure student is enrolled in the course
+        if not Enrollment.objects.filter(
+            student=self.student, 
+            course=self.result.course
+        ).exists():
+            raise ValidationError("Student is not enrolled in this course")
+
+    def save(self, *args, **kwargs):
+        self.full_clean()
+        super().save(*args, **kwargs)
 
     def __str__(self):
         return f"{self.student.name} - {self.result.course.code}"
@@ -146,7 +143,7 @@ class SubmittedResultScore(models.Model):
     ca_slot2 = models.DecimalField(max_digits=5, decimal_places=2, null=True, blank=True)
     ca_slot3 = models.DecimalField(max_digits=5, decimal_places=2, null=True, blank=True)
     ca_slot4 = models.DecimalField(max_digits=5, decimal_places=2, null=True, blank=True)
-    exam_mark = models.DecimalField(max_digits=5, decimal_places=2)
+    exam_mark = models.DecimalField(max_digits=5, decimal_places=2, null=True, blank=True)
 
 
 class ResultModificationLog(models.Model):
