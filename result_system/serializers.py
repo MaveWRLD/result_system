@@ -2,7 +2,7 @@ from django.contrib.auth import get_user_model
 from django.db import transaction
 from rest_framework import serializers
 from djoser.serializers import UserCreateSerializer as BaseUserSerializer
-from .models import Result, Course, Enrollment, Assessment, Student, SubmittedResult, SubmittedResultScore
+from .models import Result, Course, Enrollment, Assessment, ResultModificationLog, Student, SubmittedResult, SubmittedResultScore
 
 User = get_user_model()
 
@@ -89,13 +89,31 @@ class SubmittedResultScoreSerializer(serializers.ModelSerializer):
         model = SubmittedResultScore
         fields = ['id', 'submitted_result_id', 'student_id',
                   'ca_slot1', 'ca_slot2', 'ca_slot3', 'ca_slot4', 'exam_mark']
+        read_only_fields = ('id', 'submitted_result_id', 'student_id')
 
     def create(self, validated_data):
         result_id = self.context['submitted_result_id']
         return Assessment.objects.create(result_id=result_id, **validated_data)
 
 
-class UserSerializer(serializers.ModelSerializer):
+class ResultModificationLogSerializer(serializers.ModelSerializer):
+    modified_by = serializers.StringRelatedField()
+    student = serializers.SerializerMethodField()
+    
     class Meta:
-        model = User
-        fields = ['id', 'first_name', 'last_name']
+        model = ResultModificationLog
+        fields = [
+            'id',
+            'student',
+            'modified_by',
+            'old_data',
+            'new_data',
+            'reason',
+            'modified_at'
+        ]
+    
+    def get_student(self, obj):
+        return {
+            'id': obj.submitted_result_score.student.id,
+            'name': obj.submitted_result_score.student.name
+        }
