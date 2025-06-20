@@ -1,6 +1,8 @@
 from django.contrib.auth import get_user_model
 from django_filters.rest_framework import DjangoFilterBackend
-from rest_framework.decorators import action
+from rest_framework.response import Response
+from rest_framework.decorators import action, api_view, APIView
+from rest_framework.generics import ListAPIView, ListCreateAPIView
 from rest_framework.mixins import ListModelMixin, UpdateModelMixin, RetrieveModelMixin
 from rest_framework.viewsets import GenericViewSet, ModelViewSet, ReadOnlyModelViewSet
 from rest_framework.permissions import DjangoModelPermissions
@@ -28,13 +30,13 @@ class ResultViewSet(ModelViewSet):
     queryset = Result.objects.all()
     serializer_class = ResultSerializer
 
-    # @action(detail=True, methods=['post', 'get'])
-    # def submit(self, request):
-    #    result_id = self.kwargs['result_pk']
-    #    serializer = SubmitResultSerializer(data=request.data, context={'lecturer_id': request.user.id})
-    #    serializer.is_valid(raise_exception=True)
-    #    serializer.save()
-    #    return Response(serializer.data)
+    @action(detail=True, methods=['post', 'get'])
+    def submit(self, request, course_pk=None, pk=None):
+        serializer = SubmitResultSerializer(data=request.data, context={
+                                            'lecturer_id': request.user.id, 'result_id': self.kwargs['pk']})
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(serializer.data)
 
     def get_queryset(self):
         return Result.objects.filter(course_id=self.kwargs['course_pk'])
@@ -54,11 +56,10 @@ class AssessmentViewSet(ModelViewSet):
         result = Result.objects.get(pk=result_id)
         context['result'] = result  # Pass to serializer
         context['result_id'] = result_id  # Pass to serializer
-
         return context
 
 
-class SubmittedResultViewSet(ModelViewSet):
+class SubmittedResultViewSet(ListModelMixin, RetrieveModelMixin, UpdateModelMixin, GenericViewSet):
     queryset = SubmittedResult.objects.all()
     permission_classes = [DjangoModelPermissions]
 
@@ -78,8 +79,6 @@ class SubmittedResultViewSet(ModelViewSet):
             return SubmittedResult.objects.filter(lecturer=user.id)
 
     def get_serializer_class(self):
-        if self.request.method == 'POST':
-            return SubmitResultSerializer
         return SubmittedResultSerializer
 
     def get_serializer_context(self):
