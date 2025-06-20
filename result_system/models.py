@@ -133,7 +133,7 @@ class SubmittedResult(models.Model):
 
     ]
     submitted_at = models.DateField(auto_now_add=True)
-    result_status = models.CharField(max_length=50, choices=RESULT_STATUS, default='D')
+    result_status = models.CharField(max_length=50, choices=RESULT_STATUS, default='P_D')
     lecturer = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
 
 class SubmittedResultScore(models.Model):
@@ -147,7 +147,7 @@ class SubmittedResultScore(models.Model):
 
 
 class ResultModificationLog(models.Model):
-    result = models.ForeignKey(Result, on_delete=models.CASCADE, related_name="modification_logs")
+    submitted_result_score = models.ForeignKey(SubmittedResultScore, on_delete=models.CASCADE, related_name="modification_logs")
     modified_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True)
     old_data = models.JSONField()  # Stores previous CA/exam values
     new_data = models.JSONField()
@@ -158,3 +158,4 @@ class ResultModificationLog(models.Model):
         return f"Modification by {self.modified_by} on {self.modified_at}"
 
 # Create your models here.
+
