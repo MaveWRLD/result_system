@@ -1,0 +1,87 @@
+{% load static %}
+{% block subject %}Result Modification: {{ student.name }} - {{ course.name }}{% endblock %}
+
+{% block html_body %}
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="{% static 'result_system/styles.css' %}">
+</head>
+<body>
+    <div class="header">
+        <h2>Result Modification Notification</h2>
+    </div>
+    
+    <div class="content">
+        <div class="section">
+            <p>Dear Lecturer,</p>
+            <p>A result for <strong>{{ student.name }}</strong> in <strong>{{ course }} ({{ course }})</strong> has been modified in the system.</p>
+            
+            <div class="highlight">
+                <p><strong>Modification Reason:</strong></p>
+                <p><strong>{{ reason }}</strong></p>
+            </div>
+        </div>
+        
+        <div class="section">
+            <h3>Modification Details</h3>
+            <table>
+                <tr>
+                    <td><strong>Modified By:</strong></td>
+                    <td>{{ modified_by.get_full_name|default:modified_by.username }}</td>
+                </tr>
+                <tr>
+                    <td><strong>Modified At:</strong></td>
+                    <td>{{ modified_at|date:"F j, Y H:i" }}</td>
+                </tr>
+                <tr>
+                    <td><strong>Student:</strong></td>
+                    <td>{{ student.name }} (ID: {{ student.student_id }})</td>
+                </tr>
+                <tr>
+                    <td><strong>Course:</strong></td>
+                    <td>{{ course.name }} (Code: {{ course.code }})</td>
+                </tr>
+            </table>
+        </div>
+        
+        <div class="section">
+            <h3>Changes Made</h3>
+            {% if changes %}
+            <table>
+                <thead>
+                    <tr>
+                        <th>Field</th>
+                        <th>Previous Value</th>
+                        <th>New Value</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for change in changes %}
+                    <tr>
+                        <td class="field-name">{{ change.field }}</td>
+                        <td>{{ change.old_value }}</td>
+                        <td><strong>{{ change.new_value }}</strong></td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            {% else %}
+            <p>No specific field changes recorded.</p>
+            {% endif %}
+        </div>
+        
+        <div class="section">
+            <p>You can view the full result details here:</p>
+            <p><a href="{{ detail_url }}" class="btn">View Result Details</a></p>
+        </div>
+        
+        <div class="footer">
+            <p>This is an automated notification from {{ system_name }}.</p>
+            <p>Please do not reply to this email.</p>
+            <p>© {% now "Y" %} Academic Results System. All rights reserved.</p>
+        </div>
+    </div>
+</body>
+</html>
+{% endblock %}
