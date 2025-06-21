@@ -17,6 +17,7 @@ whitenoise = "*"
 gunicorn = "*"
 drf-spectacular = "*"
 django-cors-headers = "*"
+django-templated-mail = "*"
 
 [dev-packages]
 
