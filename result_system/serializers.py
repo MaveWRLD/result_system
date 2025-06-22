@@ -58,8 +58,9 @@ class SubmitResultSerializer(serializers.Serializer):
             result_id = self.context['result_id']
             if Result.objects.filter(id=result_id).exists():
                 lecturer_id = User.objects.get(id=self.context['lecturer_id'])
+                course_id = Course.objects.get(id=self.context['course_id'])
                 submitted_result = SubmittedResult.objects.create(
-                    lecturer=lecturer_id)
+                    lecturer=lecturer_id, course=course_id)
                 assessments = Assessment.objects.filter(result_id=result_id)
                 submitted_result_score = [
                     SubmittedResultScore(
@@ -81,7 +82,8 @@ class SubmitResultSerializer(serializers.Serializer):
 class SubmittedResultSerializer(serializers.ModelSerializer):
     class Meta:
         model = SubmittedResult
-        fields = ['id', 'submitted_at', 'result_status', 'lecturer_id']
+        fields = ['id', 'course_id', 'submitted_at',
+                  'result_status', 'lecturer_id']
 
 
 class SubmittedResultScoreSerializer(serializers.ModelSerializer):
@@ -99,7 +101,7 @@ class SubmittedResultScoreSerializer(serializers.ModelSerializer):
 class ResultModificationLogSerializer(serializers.ModelSerializer):
     modified_by = serializers.StringRelatedField()
     student = serializers.SerializerMethodField()
-    
+
     class Meta:
         model = ResultModificationLog
         fields = [
@@ -111,7 +113,7 @@ class ResultModificationLogSerializer(serializers.ModelSerializer):
             'reason',
             'modified_at'
         ]
-    
+
     def get_student(self, obj):
         return {
             'id': obj.submitted_result_score.student.id,

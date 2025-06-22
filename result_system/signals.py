@@ -34,7 +34,7 @@ def send_lecturer_email_for_result_modification(sender, **kwargs):
         lecturer = submitted_result.lecturer
         student = submitted_result_score.student
         # course = submitted_result.course
-        course = 'course'
+        course = submitted_result.course
 
         # Prepare changes list with formatted field names
         changes = []

@@ -34,8 +34,12 @@ class ResultViewSet(ModelViewSet):
 
     @action(detail=True, methods=['post', 'get'])
     def submit(self, request, course_pk=None, pk=None):
-        serializer = SubmitResultSerializer(data=request.data, context={
-                                            'lecturer_id': request.user.id, 'result_id': self.kwargs['pk']})
+        serializer = SubmitResultSerializer(
+            data=request.data, context={
+            'lecturer_id': request.user.id,
+            'result_id': self.kwargs['pk'],
+            'course_id': self.kwargs['course_pk']}
+        )
         serializer.is_valid(raise_exception=True)
         serializer.save()
         return Response(serializer.data)
@@ -47,7 +51,7 @@ class ResultViewSet(ModelViewSet):
         return {'course_id': self.kwargs['course_pk']}
 
 
-class AssessmentViewSet(ModelViewSet):
+class AssessmentViewSet(ListModelMixin, RetrieveModelMixin, UpdateModelMixin, GenericViewSet):
     queryset = Assessment.objects.all()
     serializer_class = AssessmentSerializer
 
@@ -110,20 +114,20 @@ class SubmittedResultScoreViewSet(ListModelMixin, RetrieveModelMixin, UpdateMode
             # Skip read-only fields
             if field in self.serializer_class.Meta.read_only_fields:
                 continue
-                
+
             old_value = getattr(instance, field)
-            
+
             # Convert Decimals for proper comparison
             if isinstance(old_value, Decimal) or isinstance(new_value, Decimal):
                 old_value = self.decimal_to_float(old_value)
                 new_value = self.decimal_to_float(new_value)
-            
+
             if old_value != new_value:
                 changes[field] = {
                     'old': old_value,
                     'new': new_value
                 }
-                
+
         return changes
 
     @transaction.atomic
@@ -150,9 +154,9 @@ class SubmittedResultScoreViewSet(ListModelMixin, RetrieveModelMixin, UpdateMode
                 submitted_result_score=instance,
                 modified_by=request.user,
                 old_data={field: self.decimal_to_float(change['old'])
-                                for field, change in changes.items()},
+                          for field, change in changes.items()},
                 new_data={field: self.decimal_to_float(change['new'])
-                            for field, change in changes.items()},
+                          for field, change in changes.items()},
                 reason=reason
             )
 
@@ -203,9 +207,9 @@ class SubmittedResultScoreViewSet(ListModelMixin, RetrieveModelMixin, UpdateMode
                             submitted_result_score=instance,
                             modified_by=request.user,
                             old_data={f: self.decimal_to_float(c['old'])
-                                            for f, c in changes.items()},
+                                      for f, c in changes.items()},
                             new_data={f: self.decimal_to_float(c['new'])
-                                        for f, c in changes.items()},
+                                      for f, c in changes.items()},
                             reason=reason
                         ))
 
@@ -237,22 +241,22 @@ class SubmittedResultScoreViewSet(ListModelMixin, RetrieveModelMixin, UpdateMode
                 ResultModificationLog.objects.bulk_create(logs)
 
         return Response(results, status=status.HTTP_200_OK)
-    
+
 
 class ResultModificationLogViewSet(ListModelMixin, RetrieveModelMixin, GenericViewSet):
     serializer_class = ResultModificationLogSerializer
     queryset = ResultModificationLog.objects.all().select_related(
-        'modified_by', 
+        'modified_by',
         'submitted_result_score',
         'submitted_result_score__student'
     )
-    
-    #filter_backends = [DjangoFilterBackend]
-    #filterset_fields = [
+
+    # filter_backends = [DjangoFilterBackend]
+    # filterset_fields = [
     #    'submitted_result_score__id',
     #    'modified_by__id',
     #    'submitted_result_score__student__id'
-    #]
+    # ]
 
 
 # Create your views here.
