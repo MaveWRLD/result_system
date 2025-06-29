@@ -15,9 +15,10 @@ djangorestframework-simplejwt = "*"
 python-decouple = "*"
 whitenoise = "*"
 gunicorn = "*"
-drf-spectacular = "*"
 django-cors-headers = "*"
 django-templated-mail = "*"
+drf-spectacular = "*"
+psycopg2-binary = "*"
 
 [dev-packages]
 
