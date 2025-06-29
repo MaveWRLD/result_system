@@ -1,3 +1,4 @@
+import dj_database_url
 from .common import *
 
 SECRET_KEY = config('SECRET_KEY')
@@ -12,6 +13,7 @@ DATABASES = {
     }
 }
 
+DATABASES['default'] = dj_database_url.parse(config('DATABASE_URL'))
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'localhost'

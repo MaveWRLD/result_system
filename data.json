@@ -1,0 +1,3156 @@
+[
+{
+    "model": "contenttypes.contenttype",
+    "fields": {
+        "app_label": "admin",
+        "model": "logentry"
+    }
+},
+{
+    "model": "contenttypes.contenttype",
+    "fields": {
+        "app_label": "auth",
+        "model": "permission"
+    }
+},
+{
+    "model": "contenttypes.contenttype",
+    "fields": {
+        "app_label": "auth",
+        "model": "group"
+    }
+},
+{
+    "model": "contenttypes.contenttype",
+    "fields": {
+        "app_label": "contenttypes",
+        "model": "contenttype"
+    }
+},
+{
+    "model": "contenttypes.contenttype",
+    "fields": {
+        "app_label": "sessions",
+        "model": "session"
+    }
+},
+{
+    "model": "contenttypes.contenttype",
+    "fields": {
+        "app_label": "core",
+        "model": "user"
+    }
+},
+{
+    "model": "contenttypes.contenttype",
+    "fields": {
+        "app_label": "result_system",
+        "model": "resultmodificationlog"
+    }
+},
+{
+    "model": "contenttypes.contenttype",
+    "fields": {
+        "app_label": "result_system",
+        "model": "department"
+    }
+},
+{
+    "model": "contenttypes.contenttype",
+    "fields": {
+        "app_label": "result_system",
+        "model": "role"
+    }
+},
+{
+    "model": "contenttypes.contenttype",
+    "fields": {
+        "app_label": "result_system",
+        "model": "enrollment"
+    }
+},
+{
+    "model": "contenttypes.contenttype",
+    "fields": {
+        "app_label": "result_system",
+        "model": "userrole"
+    }
+},
+{
+    "model": "contenttypes.contenttype",
+    "fields": {
+        "app_label": "result_system",
+        "model": "faculty"
+    }
+},
+{
+    "model": "contenttypes.contenttype",
+    "fields": {
+        "app_label": "result_system",
+        "model": "program"
+    }
+},
+{
+    "model": "contenttypes.contenttype",
+    "fields": {
+        "app_label": "result_system",
+        "model": "assessment"
+    }
+},
+{
+    "model": "contenttypes.contenttype",
+    "fields": {
+        "app_label": "result_system",
+        "model": "submittedresult"
+    }
+},
+{
+    "model": "contenttypes.contenttype",
+    "fields": {
+        "app_label": "result_system",
+        "model": "course"
+    }
+},
+{
+    "model": "contenttypes.contenttype",
+    "fields": {
+        "app_label": "result_system",
+        "model": "student"
+    }
+},
+{
+    "model": "contenttypes.contenttype",
+    "fields": {
+        "app_label": "result_system",
+        "model": "submittedresultscore"
+    }
+},
+{
+    "model": "contenttypes.contenttype",
+    "fields": {
+        "app_label": "result_system",
+        "model": "result"
+    }
+},
+{
+    "model": "contenttypes.contenttype",
+    "fields": {
+        "app_label": "result_system",
+        "model": "profile"
+    }
+},
+{
+    "model": "sessions.session",
+    "pk": "kx1ueg9ixse12uppzq82jth13r47c0uf",
+    "fields": {
+        "session_data": ".eJxVjEEOwiAQRe_C2hCgQMGle89AhpmpVA0kpV0Z765NutDtf-_9l0iwrSVtnZc0kziLKE6_WwZ8cN0B3aHemsRW12XOclfkQbu8NuLn5XD_Dgr08q29NgMHM6mgbSRma6L1qBGD044CoMkO46iAFKHDYD1FHibISlulRyfeH9h9N6I:1uK8MT:-TyfytsdN1lWWvGXQrgMuGgl2YvcS2KnbCVzrUUX5hY",
+        "expire_date": "2025-06-11T04:25:53.788Z"
+    }
+},
+{
+    "model": "sessions.session",
+    "pk": "n5gesdrnwcucs9putd1c1ws2v3vcj3gm",
+    "fields": {
+        "session_data": ".eJxVjEEOwiAQRe_C2hCgQMGle89AhpmpVA0kpV0Z765NutDtf-_9l0iwrSVtnZc0kziLKE6_WwZ8cN0B3aHemsRW12XOclfkQbu8NuLn5XD_Dgr08q29NgMHM6mgbSRma6L1qBGD044CoMkO46iAFKHDYD1FHibISlulRyfeH9h9N6I:1uVxqv:SajvOrug0DHytFf7Xto_z6Kzmrlk7_2whjrMXH91cSs",
+        "expire_date": "2025-07-13T19:38:13.811Z"
+    }
+},
+{
+    "model": "sessions.session",
+    "pk": "zbtcgb581wtwa0kw43fckf6i5jw3eybm",
+    "fields": {
+        "session_data": ".eJxVjEEOwiAQRe_C2hCgQMGle89AhpmpVA0kpV0Z765NutDtf-_9l0iwrSVtnZc0kziLKE6_WwZ8cN0B3aHemsRW12XOclfkQbu8NuLn5XD_Dgr08q29NgMHM6mgbSRma6L1qBGD044CoMkO46iAFKHDYD1FHibISlulRyfeH9h9N6I:1uQTiv:YLCICfWHU_Jz60aOgAIDxh3EsZsPUTDgZMnk3HElIG4",
+        "expire_date": "2025-06-28T16:27:17.020Z"
+    }
+},
+{
+    "model": "result_system.faculty",
+    "pk": 1,
+    "fields": {
+        "name": "Faculty of Engineering & Technology"
+    }
+},
+{
+    "model": "result_system.faculty",
+    "pk": 2,
+    "fields": {
+        "name": "Faculty of Natural Sciences"
+    }
+},
+{
+    "model": "result_system.faculty",
+    "pk": 3,
+    "fields": {
+        "name": "Faculty of Arts & Humanities"
+    }
+},
+{
+    "model": "result_system.department",
+    "pk": 1,
+    "fields": {
+        "name": "Computer Science",
+        "faculty": 1
+    }
+},
+{
+    "model": "result_system.department",
+    "pk": 2,
+    "fields": {
+        "name": "Electrical Engineering",
+        "faculty": 1
+    }
+},
+{
+    "model": "result_system.department",
+    "pk": 3,
+    "fields": {
+        "name": "Mathematics",
+        "faculty": 2
+    }
+},
+{
+    "model": "result_system.department",
+    "pk": 4,
+    "fields": {
+        "name": "Physics",
+        "faculty": 2
+    }
+},
+{
+    "model": "result_system.department",
+    "pk": 5,
+    "fields": {
+        "name": "History",
+        "faculty": 3
+    }
+},
+{
+    "model": "result_system.department",
+    "pk": 6,
+    "fields": {
+        "name": "Literature",
+        "faculty": 3
+    }
+},
+{
+    "model": "result_system.program",
+    "pk": 1,
+    "fields": {
+        "name": "BSc Computer Science",
+        "department": 1
+    }
+},
+{
+    "model": "result_system.program",
+    "pk": 2,
+    "fields": {
+        "name": "BSc Electrical Engineering",
+        "department": 2
+    }
+},
+{
+    "model": "result_system.program",
+    "pk": 3,
+    "fields": {
+        "name": "BSc Mathematics",
+        "department": 3
+    }
+},
+{
+    "model": "result_system.program",
+    "pk": 4,
+    "fields": {
+        "name": "BSc Physics",
+        "department": 4
+    }
+},
+{
+    "model": "result_system.program",
+    "pk": 5,
+    "fields": {
+        "name": "BA History",
+        "department": 5
+    }
+},
+{
+    "model": "result_system.program",
+    "pk": 6,
+    "fields": {
+        "name": "BA English Literature",
+        "department": 6
+    }
+},
+{
+    "model": "result_system.student",
+    "pk": 1,
+    "fields": {
+        "student_id": "STD-2023-001",
+        "name": "John Smith",
+        "email": "john.smith@student.uni.edu",
+        "program": 1,
+        "enrollment_year": 2023
+    }
+},
+{
+    "model": "result_system.student",
+    "pk": 2,
+    "fields": {
+        "student_id": "STD-2023-002",
+        "name": "Emma Johnson",
+        "email": "emma.johnson@student.uni.edu",
+        "program": 1,
+        "enrollment_year": 2023
+    }
+},
+{
+    "model": "result_system.student",
+    "pk": 3,
+    "fields": {
+        "student_id": "STD-2023-003",
+        "name": "Michael Brown",
+        "email": "michael.brown@student.uni.edu",
+        "program": 1,
+        "enrollment_year": 2023
+    }
+},
+{
+    "model": "result_system.student",
+    "pk": 4,
+    "fields": {
+        "student_id": "STD-2023-004",
+        "name": "Sarah Wilson",
+        "email": "sarah.wilson@student.uni.edu",
+        "program": 2,
+        "enrollment_year": 2023
+    }
+},
+{
+    "model": "result_system.student",
+    "pk": 5,
+    "fields": {
+        "student_id": "STD-2023-005",
+        "name": "David Taylor",
+        "email": "david.taylor@student.uni.edu",
+        "program": 2,
+        "enrollment_year": 2023
+    }
+},
+{
+    "model": "result_system.student",
+    "pk": 6,
+    "fields": {
+        "student_id": "STD-2023-006",
+        "name": "Olivia Davies",
+        "email": "olivia.davies@student.uni.edu",
+        "program": 3,
+        "enrollment_year": 2023
+    }
+},
+{
+    "model": "result_system.student",
+    "pk": 7,
+    "fields": {
+        "student_id": "STD-2023-007",
+        "name": "James Evans",
+        "email": "james.evans@student.uni.edu",
+        "program": 3,
+        "enrollment_year": 2023
+    }
+},
+{
+    "model": "result_system.student",
+    "pk": 8,
+    "fields": {
+        "student_id": "STD-2023-008",
+        "name": "Sophia Roberts",
+        "email": "sophia.roberts@student.uni.edu",
+        "program": 4,
+        "enrollment_year": 2023
+    }
+},
+{
+    "model": "result_system.student",
+    "pk": 9,
+    "fields": {
+        "student_id": "STD-2023-009",
+        "name": "William Walker",
+        "email": "william.walker@student.uni.edu",
+        "program": 4,
+        "enrollment_year": 2023
+    }
+},
+{
+    "model": "result_system.student",
+    "pk": 10,
+    "fields": {
+        "student_id": "STD-2023-010",
+        "name": "Isabella Green",
+        "email": "isabella.green@student.uni.edu",
+        "program": 5,
+        "enrollment_year": 2023
+    }
+},
+{
+    "model": "result_system.student",
+    "pk": 11,
+    "fields": {
+        "student_id": "STD-2023-011",
+        "name": "Benjamin White",
+        "email": "benjamin.white@student.uni.edu",
+        "program": 5,
+        "enrollment_year": 2023
+    }
+},
+{
+    "model": "result_system.student",
+    "pk": 12,
+    "fields": {
+        "student_id": "STD-2023-012",
+        "name": "Mia Hall",
+        "email": "mia.hall@student.uni.edu",
+        "program": 6,
+        "enrollment_year": 2023
+    }
+},
+{
+    "model": "result_system.student",
+    "pk": 13,
+    "fields": {
+        "student_id": "STD-2023-013",
+        "name": "Daniel Clark",
+        "email": "daniel.clark@student.uni.edu",
+        "program": 6,
+        "enrollment_year": 2023
+    }
+},
+{
+    "model": "result_system.student",
+    "pk": 14,
+    "fields": {
+        "student_id": "STD-2023-014",
+        "name": "Emily Turner",
+        "email": "emily.turner@student.uni.edu",
+        "program": 1,
+        "enrollment_year": 2023
+    }
+},
+{
+    "model": "result_system.student",
+    "pk": 15,
+    "fields": {
+        "student_id": "STD-2023-015",
+        "name": "Alexander Harris",
+        "email": "alexander.harris@student.uni.edu",
+        "program": 2,
+        "enrollment_year": 2023
+    }
+},
+{
+    "model": "result_system.student",
+    "pk": 16,
+    "fields": {
+        "student_id": "STD-2023-016",
+        "name": "Charlotte Martin",
+        "email": "charlotte.martin@student.uni.edu",
+        "program": 3,
+        "enrollment_year": 2023
+    }
+},
+{
+    "model": "result_system.student",
+    "pk": 17,
+    "fields": {
+        "student_id": "STD-2023-017",
+        "name": "Henry Young",
+        "email": "henry.young@student.uni.edu",
+        "program": 4,
+        "enrollment_year": 2023
+    }
+},
+{
+    "model": "result_system.student",
+    "pk": 18,
+    "fields": {
+        "student_id": "STD-2023-018",
+        "name": "Amelia King",
+        "email": "amelia.king@student.uni.edu",
+        "program": 5,
+        "enrollment_year": 2023
+    }
+},
+{
+    "model": "result_system.student",
+    "pk": 19,
+    "fields": {
+        "student_id": "STD-2023-019",
+        "name": "Joseph Wright",
+        "email": "joseph.wright@student.uni.edu",
+        "program": 6,
+        "enrollment_year": 2023
+    }
+},
+{
+    "model": "result_system.student",
+    "pk": 20,
+    "fields": {
+        "student_id": "STD-2023-020",
+        "name": "Ella Scott",
+        "email": "ella.scott@student.uni.edu",
+        "program": 1,
+        "enrollment_year": 2023
+    }
+},
+{
+    "model": "result_system.student",
+    "pk": 21,
+    "fields": {
+        "student_id": "STD-2023-021",
+        "name": "Samuel Adams",
+        "email": "samuel.adams@student.uni.edu",
+        "program": 2,
+        "enrollment_year": 2023
+    }
+},
+{
+    "model": "result_system.student",
+    "pk": 22,
+    "fields": {
+        "student_id": "STD-2023-022",
+        "name": "Grace Baker",
+        "email": "grace.baker@student.uni.edu",
+        "program": 3,
+        "enrollment_year": 2023
+    }
+},
+{
+    "model": "result_system.student",
+    "pk": 23,
+    "fields": {
+        "student_id": "STD-2023-023",
+        "name": "Logan Carter",
+        "email": "logan.carter@student.uni.edu",
+        "program": 4,
+        "enrollment_year": 2023
+    }
+},
+{
+    "model": "result_system.student",
+    "pk": 24,
+    "fields": {
+        "student_id": "STD-2023-024",
+        "name": "Chloe Mitchell",
+        "email": "chloe.mitchell@student.uni.edu",
+        "program": 5,
+        "enrollment_year": 2023
+    }
+},
+{
+    "model": "result_system.student",
+    "pk": 25,
+    "fields": {
+        "student_id": "STD-2023-025",
+        "name": "Luke Roberts",
+        "email": "luke.roberts@student.uni.edu",
+        "program": 6,
+        "enrollment_year": 2023
+    }
+},
+{
+    "model": "result_system.student",
+    "pk": 26,
+    "fields": {
+        "student_id": "STD-2023-026",
+        "name": "Zoe Turner",
+        "email": "zoe.turner@student.uni.edu",
+        "program": 1,
+        "enrollment_year": 2023
+    }
+},
+{
+    "model": "result_system.student",
+    "pk": 27,
+    "fields": {
+        "student_id": "STD-2023-027",
+        "name": "Nathan Bell",
+        "email": "nathan.bell@student.uni.edu",
+        "program": 2,
+        "enrollment_year": 2023
+    }
+},
+{
+    "model": "result_system.student",
+    "pk": 28,
+    "fields": {
+        "student_id": "STD-2023-028",
+        "name": "Hannah Ward",
+        "email": "hannah.ward@student.uni.edu",
+        "program": 3,
+        "enrollment_year": 2023
+    }
+},
+{
+    "model": "result_system.student",
+    "pk": 29,
+    "fields": {
+        "student_id": "STD-2023-029",
+        "name": "Dylan Foster",
+        "email": "dylan.foster@student.uni.edu",
+        "program": 4,
+        "enrollment_year": 2023
+    }
+},
+{
+    "model": "result_system.student",
+    "pk": 30,
+    "fields": {
+        "student_id": "STD-2023-030",
+        "name": "Victoria Phillips",
+        "email": "victoria.phillips@student.uni.edu",
+        "program": 5,
+        "enrollment_year": 2023
+    }
+},
+{
+    "model": "result_system.enrollment",
+    "pk": 1,
+    "fields": {
+        "student": 1,
+        "course": 1,
+        "academic_year": 2023,
+        "semester": "Sem1"
+    }
+},
+{
+    "model": "result_system.enrollment",
+    "pk": 2,
+    "fields": {
+        "student": 2,
+        "course": 1,
+        "academic_year": 2023,
+        "semester": "Sem1"
+    }
+},
+{
+    "model": "result_system.enrollment",
+    "pk": 3,
+    "fields": {
+        "student": 3,
+        "course": 1,
+        "academic_year": 2023,
+        "semester": "Sem1"
+    }
+},
+{
+    "model": "result_system.enrollment",
+    "pk": 4,
+    "fields": {
+        "student": 14,
+        "course": 1,
+        "academic_year": 2023,
+        "semester": "Sem1"
+    }
+},
+{
+    "model": "result_system.enrollment",
+    "pk": 5,
+    "fields": {
+        "student": 20,
+        "course": 1,
+        "academic_year": 2023,
+        "semester": "Sem1"
+    }
+},
+{
+    "model": "result_system.enrollment",
+    "pk": 6,
+    "fields": {
+        "student": 26,
+        "course": 1,
+        "academic_year": 2023,
+        "semester": "Sem1"
+    }
+},
+{
+    "model": "result_system.enrollment",
+    "pk": 7,
+    "fields": {
+        "student": 1,
+        "course": 2,
+        "academic_year": 2023,
+        "semester": "Sem2"
+    }
+},
+{
+    "model": "result_system.enrollment",
+    "pk": 8,
+    "fields": {
+        "student": 2,
+        "course": 2,
+        "academic_year": 2023,
+        "semester": "Sem2"
+    }
+},
+{
+    "model": "result_system.enrollment",
+    "pk": 9,
+    "fields": {
+        "student": 3,
+        "course": 2,
+        "academic_year": 2023,
+        "semester": "Sem2"
+    }
+},
+{
+    "model": "result_system.enrollment",
+    "pk": 10,
+    "fields": {
+        "student": 14,
+        "course": 2,
+        "academic_year": 2023,
+        "semester": "Sem2"
+    }
+},
+{
+    "model": "result_system.enrollment",
+    "pk": 11,
+    "fields": {
+        "student": 20,
+        "course": 2,
+        "academic_year": 2023,
+        "semester": "Sem2"
+    }
+},
+{
+    "model": "result_system.enrollment",
+    "pk": 12,
+    "fields": {
+        "student": 26,
+        "course": 2,
+        "academic_year": 2023,
+        "semester": "Sem2"
+    }
+},
+{
+    "model": "result_system.enrollment",
+    "pk": 13,
+    "fields": {
+        "student": 6,
+        "course": 5,
+        "academic_year": 2023,
+        "semester": "Sem1"
+    }
+},
+{
+    "model": "result_system.enrollment",
+    "pk": 14,
+    "fields": {
+        "student": 7,
+        "course": 5,
+        "academic_year": 2023,
+        "semester": "Sem1"
+    }
+},
+{
+    "model": "result_system.enrollment",
+    "pk": 15,
+    "fields": {
+        "student": 16,
+        "course": 5,
+        "academic_year": 2023,
+        "semester": "Sem1"
+    }
+},
+{
+    "model": "result_system.enrollment",
+    "pk": 16,
+    "fields": {
+        "student": 22,
+        "course": 5,
+        "academic_year": 2023,
+        "semester": "Sem1"
+    }
+},
+{
+    "model": "result_system.enrollment",
+    "pk": 17,
+    "fields": {
+        "student": 28,
+        "course": 5,
+        "academic_year": 2023,
+        "semester": "Sem1"
+    }
+},
+{
+    "model": "result_system.enrollment",
+    "pk": 18,
+    "fields": {
+        "student": 8,
+        "course": 7,
+        "academic_year": 2023,
+        "semester": "Sem2"
+    }
+},
+{
+    "model": "result_system.enrollment",
+    "pk": 19,
+    "fields": {
+        "student": 9,
+        "course": 7,
+        "academic_year": 2023,
+        "semester": "Sem2"
+    }
+},
+{
+    "model": "result_system.enrollment",
+    "pk": 20,
+    "fields": {
+        "student": 17,
+        "course": 7,
+        "academic_year": 2023,
+        "semester": "Sem2"
+    }
+},
+{
+    "model": "result_system.enrollment",
+    "pk": 21,
+    "fields": {
+        "student": 23,
+        "course": 7,
+        "academic_year": 2023,
+        "semester": "Sem2"
+    }
+},
+{
+    "model": "result_system.enrollment",
+    "pk": 22,
+    "fields": {
+        "student": 29,
+        "course": 7,
+        "academic_year": 2023,
+        "semester": "Sem2"
+    }
+},
+{
+    "model": "result_system.enrollment",
+    "pk": 23,
+    "fields": {
+        "student": 10,
+        "course": 9,
+        "academic_year": 2023,
+        "semester": "Sem1"
+    }
+},
+{
+    "model": "result_system.enrollment",
+    "pk": 24,
+    "fields": {
+        "student": 11,
+        "course": 9,
+        "academic_year": 2023,
+        "semester": "Sem1"
+    }
+},
+{
+    "model": "result_system.enrollment",
+    "pk": 25,
+    "fields": {
+        "student": 18,
+        "course": 9,
+        "academic_year": 2023,
+        "semester": "Sem1"
+    }
+},
+{
+    "model": "result_system.enrollment",
+    "pk": 26,
+    "fields": {
+        "student": 24,
+        "course": 9,
+        "academic_year": 2023,
+        "semester": "Sem1"
+    }
+},
+{
+    "model": "result_system.enrollment",
+    "pk": 27,
+    "fields": {
+        "student": 30,
+        "course": 9,
+        "academic_year": 2023,
+        "semester": "Sem1"
+    }
+},
+{
+    "model": "result_system.submittedresultscore",
+    "pk": 48,
+    "fields": {
+        "submitted_result": 15,
+        "student": 1,
+        "ca_slot1": "10.00",
+        "ca_slot2": "5.00",
+        "ca_slot3": null,
+        "ca_slot4": null,
+        "exam_mark": "60.00"
+    }
+},
+{
+    "model": "result_system.submittedresultscore",
+    "pk": 49,
+    "fields": {
+        "submitted_result": 15,
+        "student": 2,
+        "ca_slot1": "10.00",
+        "ca_slot2": null,
+        "ca_slot3": "9.00",
+        "ca_slot4": null,
+        "exam_mark": "50.00"
+    }
+},
+{
+    "model": "result_system.submittedresultscore",
+    "pk": 50,
+    "fields": {
+        "submitted_result": 15,
+        "student": 3,
+        "ca_slot1": "10.00",
+        "ca_slot2": "10.00",
+        "ca_slot3": null,
+        "ca_slot4": null,
+        "exam_mark": "60.00"
+    }
+},
+{
+    "model": "result_system.submittedresultscore",
+    "pk": 51,
+    "fields": {
+        "submitted_result": 15,
+        "student": 14,
+        "ca_slot1": "12.00",
+        "ca_slot2": "15.00",
+        "ca_slot3": null,
+        "ca_slot4": null,
+        "exam_mark": "50.00"
+    }
+},
+{
+    "model": "result_system.submittedresultscore",
+    "pk": 52,
+    "fields": {
+        "submitted_result": 15,
+        "student": 20,
+        "ca_slot1": "10.00",
+        "ca_slot2": null,
+        "ca_slot3": "20.00",
+        "ca_slot4": null,
+        "exam_mark": "60.00"
+    }
+},
+{
+    "model": "result_system.submittedresultscore",
+    "pk": 53,
+    "fields": {
+        "submitted_result": 15,
+        "student": 26,
+        "ca_slot1": null,
+        "ca_slot2": null,
+        "ca_slot3": null,
+        "ca_slot4": null,
+        "exam_mark": null
+    }
+},
+{
+    "model": "auth.permission",
+    "fields": {
+        "name": "Can add log entry",
+        "content_type": [
+            "admin",
+            "logentry"
+        ],
+        "codename": "add_logentry"
+    }
+},
+{
+    "model": "auth.permission",
+    "fields": {
+        "name": "Can change log entry",
+        "content_type": [
+            "admin",
+            "logentry"
+        ],
+        "codename": "change_logentry"
+    }
+},
+{
+    "model": "auth.permission",
+    "fields": {
+        "name": "Can delete log entry",
+        "content_type": [
+            "admin",
+            "logentry"
+        ],
+        "codename": "delete_logentry"
+    }
+},
+{
+    "model": "auth.permission",
+    "fields": {
+        "name": "Can view log entry",
+        "content_type": [
+            "admin",
+            "logentry"
+        ],
+        "codename": "view_logentry"
+    }
+},
+{
+    "model": "auth.permission",
+    "fields": {
+        "name": "Can add permission",
+        "content_type": [
+            "auth",
+            "permission"
+        ],
+        "codename": "add_permission"
+    }
+},
+{
+    "model": "auth.permission",
+    "fields": {
+        "name": "Can change permission",
+        "content_type": [
+            "auth",
+            "permission"
+        ],
+        "codename": "change_permission"
+    }
+},
+{
+    "model": "auth.permission",
+    "fields": {
+        "name": "Can delete permission",
+        "content_type": [
+            "auth",
+            "permission"
+        ],
+        "codename": "delete_permission"
+    }
+},
+{
+    "model": "auth.permission",
+    "fields": {
+        "name": "Can view permission",
+        "content_type": [
+            "auth",
+            "permission"
+        ],
+        "codename": "view_permission"
+    }
+},
+{
+    "model": "auth.permission",
+    "fields": {
+        "name": "Can add group",
+        "content_type": [
+            "auth",
+            "group"
+        ],
+        "codename": "add_group"
+    }
+},
+{
+    "model": "auth.permission",
+    "fields": {
+        "name": "Can change group",
+        "content_type": [
+            "auth",
+            "group"
+        ],
+        "codename": "change_group"
+    }
+},
+{
+    "model": "auth.permission",
+    "fields": {
+        "name": "Can delete group",
+        "content_type": [
+            "auth",
+            "group"
+        ],
+        "codename": "delete_group"
+    }
+},
+{
+    "model": "auth.permission",
+    "fields": {
+        "name": "Can view group",
+        "content_type": [
+            "auth",
+            "group"
+        ],
+        "codename": "view_group"
+    }
+},
+{
+    "model": "auth.permission",
+    "fields": {
+        "name": "Can add content type",
+        "content_type": [
+            "contenttypes",
+            "contenttype"
+        ],
+        "codename": "add_contenttype"
+    }
+},
+{
+    "model": "auth.permission",
+    "fields": {
+        "name": "Can change content type",
+        "content_type": [
+            "contenttypes",
+            "contenttype"
+        ],
+        "codename": "change_contenttype"
+    }
+},
+{
+    "model": "auth.permission",
+    "fields": {
+        "name": "Can delete content type",
+        "content_type": [
+            "contenttypes",
+            "contenttype"
+        ],
+        "codename": "delete_contenttype"
+    }
+},
+{
+    "model": "auth.permission",
+    "fields": {
+        "name": "Can view content type",
+        "content_type": [
+            "contenttypes",
+            "contenttype"
+        ],
+        "codename": "view_contenttype"
+    }
+},
+{
+    "model": "auth.permission",
+    "fields": {
+        "name": "Can add session",
+        "content_type": [
+            "sessions",
+            "session"
+        ],
+        "codename": "add_session"
+    }
+},
+{
+    "model": "auth.permission",
+    "fields": {
+        "name": "Can change session",
+        "content_type": [
+            "sessions",
+            "session"
+        ],
+        "codename": "change_session"
+    }
+},
+{
+    "model": "auth.permission",
+    "fields": {
+        "name": "Can delete session",
+        "content_type": [
+            "sessions",
+            "session"
+        ],
+        "codename": "delete_session"
+    }
+},
+{
+    "model": "auth.permission",
+    "fields": {
+        "name": "Can view session",
+        "content_type": [
+            "sessions",
+            "session"
+        ],
+        "codename": "view_session"
+    }
+},
+{
+    "model": "auth.permission",
+    "fields": {
+        "name": "Can add user",
+        "content_type": [
+            "core",
+            "user"
+        ],
+        "codename": "add_user"
+    }
+},
+{
+    "model": "auth.permission",
+    "fields": {
+        "name": "Can change user",
+        "content_type": [
+            "core",
+            "user"
+        ],
+        "codename": "change_user"
+    }
+},
+{
+    "model": "auth.permission",
+    "fields": {
+        "name": "Can delete user",
+        "content_type": [
+            "core",
+            "user"
+        ],
+        "codename": "delete_user"
+    }
+},
+{
+    "model": "auth.permission",
+    "fields": {
+        "name": "Can view user",
+        "content_type": [
+            "core",
+            "user"
+        ],
+        "codename": "view_user"
+    }
+},
+{
+    "model": "auth.permission",
+    "fields": {
+        "name": "Can add result modification log",
+        "content_type": [
+            "result_system",
+            "resultmodificationlog"
+        ],
+        "codename": "add_resultmodificationlog"
+    }
+},
+{
+    "model": "auth.permission",
+    "fields": {
+        "name": "Can change result modification log",
+        "content_type": [
+            "result_system",
+            "resultmodificationlog"
+        ],
+        "codename": "change_resultmodificationlog"
+    }
+},
+{
+    "model": "auth.permission",
+    "fields": {
+        "name": "Can delete result modification log",
+        "content_type": [
+            "result_system",
+            "resultmodificationlog"
+        ],
+        "codename": "delete_resultmodificationlog"
+    }
+},
+{
+    "model": "auth.permission",
+    "fields": {
+        "name": "Can view result modification log",
+        "content_type": [
+            "result_system",
+            "resultmodificationlog"
+        ],
+        "codename": "view_resultmodificationlog"
+    }
+},
+{
+    "model": "auth.permission",
+    "fields": {
+        "name": "Can add department",
+        "content_type": [
+            "result_system",
+            "department"
+        ],
+        "codename": "add_department"
+    }
+},
+{
+    "model": "auth.permission",
+    "fields": {
+        "name": "Can change department",
+        "content_type": [
+            "result_system",
+            "department"
+        ],
+        "codename": "change_department"
+    }
+},
+{
+    "model": "auth.permission",
+    "fields": {
+        "name": "Can delete department",
+        "content_type": [
+            "result_system",
+            "department"
+        ],
+        "codename": "delete_department"
+    }
+},
+{
+    "model": "auth.permission",
+    "fields": {
+        "name": "Can view department",
+        "content_type": [
+            "result_system",
+            "department"
+        ],
+        "codename": "view_department"
+    }
+},
+{
+    "model": "auth.permission",
+    "fields": {
+        "name": "Can add role",
+        "content_type": [
+            "result_system",
+            "role"
+        ],
+        "codename": "add_role"
+    }
+},
+{
+    "model": "auth.permission",
+    "fields": {
+        "name": "Can change role",
+        "content_type": [
+            "result_system",
+            "role"
+        ],
+        "codename": "change_role"
+    }
+},
+{
+    "model": "auth.permission",
+    "fields": {
+        "name": "Can delete role",
+        "content_type": [
+            "result_system",
+            "role"
+        ],
+        "codename": "delete_role"
+    }
+},
+{
+    "model": "auth.permission",
+    "fields": {
+        "name": "Can view role",
+        "content_type": [
+            "result_system",
+            "role"
+        ],
+        "codename": "view_role"
+    }
+},
+{
+    "model": "auth.permission",
+    "fields": {
+        "name": "Can add enrollment",
+        "content_type": [
+            "result_system",
+            "enrollment"
+        ],
+        "codename": "add_enrollment"
+    }
+},
+{
+    "model": "auth.permission",
+    "fields": {
+        "name": "Can change enrollment",
+        "content_type": [
+            "result_system",
+            "enrollment"
+        ],
+        "codename": "change_enrollment"
+    }
+},
+{
+    "model": "auth.permission",
+    "fields": {
+        "name": "Can delete enrollment",
+        "content_type": [
+            "result_system",
+            "enrollment"
+        ],
+        "codename": "delete_enrollment"
+    }
+},
+{
+    "model": "auth.permission",
+    "fields": {
+        "name": "Can view enrollment",
+        "content_type": [
+            "result_system",
+            "enrollment"
+        ],
+        "codename": "view_enrollment"
+    }
+},
+{
+    "model": "auth.permission",
+    "fields": {
+        "name": "Can add user role",
+        "content_type": [
+            "result_system",
+            "userrole"
+        ],
+        "codename": "add_userrole"
+    }
+},
+{
+    "model": "auth.permission",
+    "fields": {
+        "name": "Can change user role",
+        "content_type": [
+            "result_system",
+            "userrole"
+        ],
+        "codename": "change_userrole"
+    }
+},
+{
+    "model": "auth.permission",
+    "fields": {
+        "name": "Can delete user role",
+        "content_type": [
+            "result_system",
+            "userrole"
+        ],
+        "codename": "delete_userrole"
+    }
+},
+{
+    "model": "auth.permission",
+    "fields": {
+        "name": "Can view user role",
+        "content_type": [
+            "result_system",
+            "userrole"
+        ],
+        "codename": "view_userrole"
+    }
+},
+{
+    "model": "auth.permission",
+    "fields": {
+        "name": "Can add faculty",
+        "content_type": [
+            "result_system",
+            "faculty"
+        ],
+        "codename": "add_faculty"
+    }
+},
+{
+    "model": "auth.permission",
+    "fields": {
+        "name": "Can change faculty",
+        "content_type": [
+            "result_system",
+            "faculty"
+        ],
+        "codename": "change_faculty"
+    }
+},
+{
+    "model": "auth.permission",
+    "fields": {
+        "name": "Can delete faculty",
+        "content_type": [
+            "result_system",
+            "faculty"
+        ],
+        "codename": "delete_faculty"
+    }
+},
+{
+    "model": "auth.permission",
+    "fields": {
+        "name": "Can view faculty",
+        "content_type": [
+            "result_system",
+            "faculty"
+        ],
+        "codename": "view_faculty"
+    }
+},
+{
+    "model": "auth.permission",
+    "fields": {
+        "name": "Can add program",
+        "content_type": [
+            "result_system",
+            "program"
+        ],
+        "codename": "add_program"
+    }
+},
+{
+    "model": "auth.permission",
+    "fields": {
+        "name": "Can change program",
+        "content_type": [
+            "result_system",
+            "program"
+        ],
+        "codename": "change_program"
+    }
+},
+{
+    "model": "auth.permission",
+    "fields": {
+        "name": "Can delete program",
+        "content_type": [
+            "result_system",
+            "program"
+        ],
+        "codename": "delete_program"
+    }
+},
+{
+    "model": "auth.permission",
+    "fields": {
+        "name": "Can view program",
+        "content_type": [
+            "result_system",
+            "program"
+        ],
+        "codename": "view_program"
+    }
+},
+{
+    "model": "auth.permission",
+    "fields": {
+        "name": "Can add assessment",
+        "content_type": [
+            "result_system",
+            "assessment"
+        ],
+        "codename": "add_assessment"
+    }
+},
+{
+    "model": "auth.permission",
+    "fields": {
+        "name": "Can change assessment",
+        "content_type": [
+            "result_system",
+            "assessment"
+        ],
+        "codename": "change_assessment"
+    }
+},
+{
+    "model": "auth.permission",
+    "fields": {
+        "name": "Can delete assessment",
+        "content_type": [
+            "result_system",
+            "assessment"
+        ],
+        "codename": "delete_assessment"
+    }
+},
+{
+    "model": "auth.permission",
+    "fields": {
+        "name": "Can view assessment",
+        "content_type": [
+            "result_system",
+            "assessment"
+        ],
+        "codename": "view_assessment"
+    }
+},
+{
+    "model": "auth.permission",
+    "fields": {
+        "name": "Can add submitted result",
+        "content_type": [
+            "result_system",
+            "submittedresult"
+        ],
+        "codename": "add_submittedresult"
+    }
+},
+{
+    "model": "auth.permission",
+    "fields": {
+        "name": "Can change submitted result",
+        "content_type": [
+            "result_system",
+            "submittedresult"
+        ],
+        "codename": "change_submittedresult"
+    }
+},
+{
+    "model": "auth.permission",
+    "fields": {
+        "name": "Can delete submitted result",
+        "content_type": [
+            "result_system",
+            "submittedresult"
+        ],
+        "codename": "delete_submittedresult"
+    }
+},
+{
+    "model": "auth.permission",
+    "fields": {
+        "name": "Can view submitted result",
+        "content_type": [
+            "result_system",
+            "submittedresult"
+        ],
+        "codename": "view_submittedresult"
+    }
+},
+{
+    "model": "auth.permission",
+    "fields": {
+        "name": "Can add course",
+        "content_type": [
+            "result_system",
+            "course"
+        ],
+        "codename": "add_course"
+    }
+},
+{
+    "model": "auth.permission",
+    "fields": {
+        "name": "Can change course",
+        "content_type": [
+            "result_system",
+            "course"
+        ],
+        "codename": "change_course"
+    }
+},
+{
+    "model": "auth.permission",
+    "fields": {
+        "name": "Can delete course",
+        "content_type": [
+            "result_system",
+            "course"
+        ],
+        "codename": "delete_course"
+    }
+},
+{
+    "model": "auth.permission",
+    "fields": {
+        "name": "Can view course",
+        "content_type": [
+            "result_system",
+            "course"
+        ],
+        "codename": "view_course"
+    }
+},
+{
+    "model": "auth.permission",
+    "fields": {
+        "name": "Can add student",
+        "content_type": [
+            "result_system",
+            "student"
+        ],
+        "codename": "add_student"
+    }
+},
+{
+    "model": "auth.permission",
+    "fields": {
+        "name": "Can change student",
+        "content_type": [
+            "result_system",
+            "student"
+        ],
+        "codename": "change_student"
+    }
+},
+{
+    "model": "auth.permission",
+    "fields": {
+        "name": "Can delete student",
+        "content_type": [
+            "result_system",
+            "student"
+        ],
+        "codename": "delete_student"
+    }
+},
+{
+    "model": "auth.permission",
+    "fields": {
+        "name": "Can view student",
+        "content_type": [
+            "result_system",
+            "student"
+        ],
+        "codename": "view_student"
+    }
+},
+{
+    "model": "auth.permission",
+    "fields": {
+        "name": "Can add submitted result score",
+        "content_type": [
+            "result_system",
+            "submittedresultscore"
+        ],
+        "codename": "add_submittedresultscore"
+    }
+},
+{
+    "model": "auth.permission",
+    "fields": {
+        "name": "Can change submitted result score",
+        "content_type": [
+            "result_system",
+            "submittedresultscore"
+        ],
+        "codename": "change_submittedresultscore"
+    }
+},
+{
+    "model": "auth.permission",
+    "fields": {
+        "name": "Can delete submitted result score",
+        "content_type": [
+            "result_system",
+            "submittedresultscore"
+        ],
+        "codename": "delete_submittedresultscore"
+    }
+},
+{
+    "model": "auth.permission",
+    "fields": {
+        "name": "Can view submitted result score",
+        "content_type": [
+            "result_system",
+            "submittedresultscore"
+        ],
+        "codename": "view_submittedresultscore"
+    }
+},
+{
+    "model": "auth.permission",
+    "fields": {
+        "name": "Can add result",
+        "content_type": [
+            "result_system",
+            "result"
+        ],
+        "codename": "add_result"
+    }
+},
+{
+    "model": "auth.permission",
+    "fields": {
+        "name": "Can change result",
+        "content_type": [
+            "result_system",
+            "result"
+        ],
+        "codename": "change_result"
+    }
+},
+{
+    "model": "auth.permission",
+    "fields": {
+        "name": "Can delete result",
+        "content_type": [
+            "result_system",
+            "result"
+        ],
+        "codename": "delete_result"
+    }
+},
+{
+    "model": "auth.permission",
+    "fields": {
+        "name": "Can view result",
+        "content_type": [
+            "result_system",
+            "result"
+        ],
+        "codename": "view_result"
+    }
+},
+{
+    "model": "auth.permission",
+    "fields": {
+        "name": "Can add profile",
+        "content_type": [
+            "result_system",
+            "profile"
+        ],
+        "codename": "add_profile"
+    }
+},
+{
+    "model": "auth.permission",
+    "fields": {
+        "name": "Can change profile",
+        "content_type": [
+            "result_system",
+            "profile"
+        ],
+        "codename": "change_profile"
+    }
+},
+{
+    "model": "auth.permission",
+    "fields": {
+        "name": "Can delete profile",
+        "content_type": [
+            "result_system",
+            "profile"
+        ],
+        "codename": "delete_profile"
+    }
+},
+{
+    "model": "auth.permission",
+    "fields": {
+        "name": "Can view profile",
+        "content_type": [
+            "result_system",
+            "profile"
+        ],
+        "codename": "view_profile"
+    }
+},
+{
+    "model": "auth.group",
+    "fields": {
+        "name": "Result Approvals",
+        "permissions": [
+            [
+                "change_submittedresult",
+                "result_system",
+                "submittedresult"
+            ],
+            [
+                "view_submittedresult",
+                "result_system",
+                "submittedresult"
+            ],
+            [
+                "change_submittedresultscore",
+                "result_system",
+                "submittedresultscore"
+            ],
+            [
+                "view_submittedresultscore",
+                "result_system",
+                "submittedresultscore"
+            ]
+        ]
+    }
+},
+{
+    "model": "auth.group",
+    "fields": {
+        "name": "Lecturer",
+        "permissions": [
+            [
+                "add_assessment",
+                "result_system",
+                "assessment"
+            ],
+            [
+                "change_assessment",
+                "result_system",
+                "assessment"
+            ],
+            [
+                "delete_assessment",
+                "result_system",
+                "assessment"
+            ],
+            [
+                "view_assessment",
+                "result_system",
+                "assessment"
+            ],
+            [
+                "add_result",
+                "result_system",
+                "result"
+            ],
+            [
+                "change_result",
+                "result_system",
+                "result"
+            ],
+            [
+                "delete_result",
+                "result_system",
+                "result"
+            ],
+            [
+                "view_result",
+                "result_system",
+                "result"
+            ],
+            [
+                "view_submittedresult",
+                "result_system",
+                "submittedresult"
+            ],
+            [
+                "view_submittedresultscore",
+                "result_system",
+                "submittedresultscore"
+            ]
+        ]
+    }
+},
+{
+    "model": "auth.group",
+    "fields": {
+        "name": "CO",
+        "permissions": [
+            [
+                "view_submittedresult",
+                "result_system",
+                "submittedresult"
+            ],
+            [
+                "add_submittedresultscore",
+                "result_system",
+                "submittedresultscore"
+            ],
+            [
+                "change_submittedresultscore",
+                "result_system",
+                "submittedresultscore"
+            ],
+            [
+                "view_submittedresultscore",
+                "result_system",
+                "submittedresultscore"
+            ]
+        ]
+    }
+},
+{
+    "model": "core.user",
+    "fields": {
+        "password": "pbkdf2_sha256$1000000$kzJJz1u6zSD6RYtwDhv5XC$+tbvZjzK2k90uJvwyYr0R84lZEB5fg46qAACzQ4gwuw=",
+        "last_login": null,
+        "is_superuser": false,
+        "username": "cs_lect",
+        "first_name": "Alan",
+        "last_name": "Turing",
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2023-01-01T00:00:00Z",
+        "email": "cs.lecturer@uni.edu",
+        "is_lecturer": true,
+        "is_dro": false,
+        "is_fro": false,
+        "is_co": false,
+        "groups": [
+            [
+                "Lecturer"
+            ]
+        ],
+        "user_permissions": []
+    }
+},
+{
+    "model": "core.user",
+    "fields": {
+        "password": "pbkdf2_sha256$600000$N8e9z5UZJQ7DfK1wRcXv3A$+d9VTEp4LmWq7F6oYr2Bq7TgXhM7DfK1wRcXv3A=",
+        "last_login": null,
+        "is_superuser": false,
+        "username": "ee_lect",
+        "first_name": "Nikola",
+        "last_name": "Tesla",
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2023-01-01T00:00:00Z",
+        "email": "ee.lecturer@uni.edu",
+        "is_lecturer": true,
+        "is_dro": false,
+        "is_fro": false,
+        "is_co": false,
+        "groups": [
+            [
+                "Lecturer"
+            ]
+        ],
+        "user_permissions": []
+    }
+},
+{
+    "model": "core.user",
+    "fields": {
+        "password": "pbkdf2_sha256$600000$N8e9z5UZJQ7DfK1wRcXv3A$+d9VTEp4LmWq7F6oYr2Bq7TgXhM7DfK1wRcXv3A=",
+        "last_login": null,
+        "is_superuser": false,
+        "username": "math_lect",
+        "first_name": "Ada",
+        "last_name": "Lovelace",
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2023-01-01T00:00:00Z",
+        "email": "math.lecturer@uni.edu",
+        "is_lecturer": true,
+        "is_dro": false,
+        "is_fro": false,
+        "is_co": false,
+        "groups": [
+            [
+                "Lecturer"
+            ]
+        ],
+        "user_permissions": []
+    }
+},
+{
+    "model": "core.user",
+    "fields": {
+        "password": "pbkdf2_sha256$1000000$myyo9rsmkxVyEhOtb316WD$FVNh7m62MGsVFw6F9DtTa21mU7SHJXvslc/4SfBldNs=",
+        "last_login": null,
+        "is_superuser": false,
+        "username": "cs_dro",
+        "first_name": "Grace",
+        "last_name": "Hopper",
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2023-01-01T00:00:00Z",
+        "email": "cs.dro@uni.edu",
+        "is_lecturer": true,
+        "is_dro": true,
+        "is_fro": false,
+        "is_co": false,
+        "groups": [
+            [
+                "Result Approvals"
+            ]
+        ],
+        "user_permissions": []
+    }
+},
+{
+    "model": "core.user",
+    "fields": {
+        "password": "pbkdf2_sha256$1000000$i6cfU3tRzDC4UdSP5c1n6B$R258d4TKbQAvutzUbKTiwlLFhIh+E6V+NmZBmwhnd7k=",
+        "last_login": null,
+        "is_superuser": false,
+        "username": "ee_dro",
+        "first_name": "Michael",
+        "last_name": "Faraday",
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2023-01-01T00:00:00Z",
+        "email": "ee.dro@uni.edu",
+        "is_lecturer": true,
+        "is_dro": true,
+        "is_fro": false,
+        "is_co": false,
+        "groups": [
+            [
+                "Result Approvals"
+            ]
+        ],
+        "user_permissions": []
+    }
+},
+{
+    "model": "core.user",
+    "fields": {
+        "password": "pbkdf2_sha256$600000$N8e9z5UZJQ7DfK1wRcXv3A$+d9VTEp4LmWq7F6oYr2Bq7TgXhM7DfK1wRcXv3A=",
+        "last_login": null,
+        "is_superuser": false,
+        "username": "eng_fro",
+        "first_name": "Elon",
+        "last_name": "Musk",
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2023-01-01T00:00:00Z",
+        "email": "eng.fro@uni.edu",
+        "is_lecturer": true,
+        "is_dro": false,
+        "is_fro": true,
+        "is_co": false,
+        "groups": [
+            [
+                "Result Approvals"
+            ]
+        ],
+        "user_permissions": []
+    }
+},
+{
+    "model": "core.user",
+    "fields": {
+        "password": "pbkdf2_sha256$1000000$nYAGJ5HJU3bvgAarKIH6ZC$aVdKVJcYdzjd18a0DWWFBMjNwFYaTQRyjjA8e0yR3PI=",
+        "last_login": null,
+        "is_superuser": false,
+        "username": "sci_fro",
+        "first_name": "Marie",
+        "last_name": "Curie",
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2023-01-01T00:00:00Z",
+        "email": "sci.fro@uni.edu",
+        "is_lecturer": true,
+        "is_dro": false,
+        "is_fro": true,
+        "is_co": false,
+        "groups": [
+            [
+                "Result Approvals"
+            ]
+        ],
+        "user_permissions": []
+    }
+},
+{
+    "model": "core.user",
+    "fields": {
+        "password": "pbkdf2_sha256$1000000$PGGziCl1KzehUYRIFETXrt$k3uJmmaTgwM/l2FxwQc5Zq5M2n9f5fQrmtnBgaSZ75s=",
+        "last_login": null,
+        "is_superuser": false,
+        "username": "co",
+        "first_name": "Corrections",
+        "last_name": "Officer",
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2023-01-01T00:00:00Z",
+        "email": "co@uni.edu",
+        "is_lecturer": false,
+        "is_dro": false,
+        "is_fro": false,
+        "is_co": true,
+        "groups": [
+            [
+                "CO"
+            ]
+        ],
+        "user_permissions": []
+    }
+},
+{
+    "model": "core.user",
+    "fields": {
+        "password": "pbkdf2_sha256$1000000$88ScBTDgZ9LkXBXN1t338f$EE1raChyYKJUPnH9Yud5VR8qHNhYdauJjdl/NyFmtEE=",
+        "last_login": "2025-06-29T19:38:13.780Z",
+        "is_superuser": true,
+        "username": "mave",
+        "first_name": "",
+        "last_name": "",
+        "is_staff": true,
+        "is_active": true,
+        "date_joined": "2025-05-27T16:48:37.095Z",
+        "email": "mave@gmail.com",
+        "is_lecturer": false,
+        "is_dro": false,
+        "is_fro": false,
+        "is_co": false,
+        "groups": [],
+        "user_permissions": []
+    }
+},
+{
+    "model": "result_system.profile",
+    "pk": 1,
+    "fields": {
+        "user": [
+            "cs_lect"
+        ],
+        "department": 1
+    }
+},
+{
+    "model": "result_system.profile",
+    "pk": 2,
+    "fields": {
+        "user": [
+            "cs_dro"
+        ],
+        "department": 1
+    }
+},
+{
+    "model": "result_system.profile",
+    "pk": 3,
+    "fields": {
+        "user": [
+            "ee_dro"
+        ],
+        "department": 2
+    }
+},
+{
+    "model": "result_system.profile",
+    "pk": 4,
+    "fields": {
+        "user": [
+            "ee_lect"
+        ],
+        "department": 2
+    }
+},
+{
+    "model": "result_system.profile",
+    "pk": 5,
+    "fields": {
+        "user": [
+            "eng_fro"
+        ],
+        "department": 2
+    }
+},
+{
+    "model": "result_system.profile",
+    "pk": 6,
+    "fields": {
+        "user": [
+            "math_lect"
+        ],
+        "department": 3
+    }
+},
+{
+    "model": "result_system.profile",
+    "pk": 7,
+    "fields": {
+        "user": [
+            "sci_fro"
+        ],
+        "department": 1
+    }
+},
+{
+    "model": "result_system.course",
+    "pk": 1,
+    "fields": {
+        "code": "CS101",
+        "name": "Introduction to Programming",
+        "program": 1,
+        "credit": 3,
+        "lecturer": [
+            "cs_lect"
+        ]
+    }
+},
+{
+    "model": "result_system.course",
+    "pk": 2,
+    "fields": {
+        "code": "CS201",
+        "name": "Data Structures & Algorithms",
+        "program": 1,
+        "credit": 3,
+        "lecturer": [
+            "cs_lect"
+        ]
+    }
+},
+{
+    "model": "result_system.course",
+    "pk": 3,
+    "fields": {
+        "code": "EE101",
+        "name": "Circuit Analysis",
+        "program": 2,
+        "credit": 3,
+        "lecturer": [
+            "ee_lect"
+        ]
+    }
+},
+{
+    "model": "result_system.course",
+    "pk": 4,
+    "fields": {
+        "code": "EE201",
+        "name": "Digital Electronics",
+        "program": 2,
+        "credit": 3,
+        "lecturer": [
+            "ee_lect"
+        ]
+    }
+},
+{
+    "model": "result_system.course",
+    "pk": 5,
+    "fields": {
+        "code": "MATH101",
+        "name": "Calculus I",
+        "program": 3,
+        "credit": 3,
+        "lecturer": [
+            "math_lect"
+        ]
+    }
+},
+{
+    "model": "result_system.course",
+    "pk": 6,
+    "fields": {
+        "code": "MATH201",
+        "name": "Linear Algebra",
+        "program": 3,
+        "credit": 3,
+        "lecturer": [
+            "math_lect"
+        ]
+    }
+},
+{
+    "model": "result_system.course",
+    "pk": 7,
+    "fields": {
+        "code": "PHY101",
+        "name": "Classical Mechanics",
+        "program": 4,
+        "credit": 3,
+        "lecturer": [
+            "math_lect"
+        ]
+    }
+},
+{
+    "model": "result_system.course",
+    "pk": 8,
+    "fields": {
+        "code": "PHY201",
+        "name": "Quantum Physics",
+        "program": 4,
+        "credit": 3,
+        "lecturer": [
+            "math_lect"
+        ]
+    }
+},
+{
+    "model": "result_system.course",
+    "pk": 9,
+    "fields": {
+        "code": "HIST101",
+        "name": "World History",
+        "program": 5,
+        "credit": 2,
+        "lecturer": [
+            "cs_lect"
+        ]
+    }
+},
+{
+    "model": "result_system.course",
+    "pk": 10,
+    "fields": {
+        "code": "LIT101",
+        "name": "English Literature",
+        "program": 6,
+        "credit": 2,
+        "lecturer": [
+            "cs_lect"
+        ]
+    }
+},
+{
+    "model": "result_system.submittedresult",
+    "pk": 15,
+    "fields": {
+        "course": 1,
+        "submitted_at": "2025-06-22",
+        "result_status": "A",
+        "lecturer": [
+            "cs_lect"
+        ]
+    }
+},
+{
+    "model": "result_system.resultmodificationlog",
+    "pk": 32,
+    "fields": {
+        "submitted_result_score": 50,
+        "modified_by": [
+            "co"
+        ],
+        "old_data": {
+            "ca_slot1": null,
+            "ca_slot2": null,
+            "exam_mark": null
+        },
+        "new_data": {
+            "ca_slot1": 10.0,
+            "ca_slot2": 10.0,
+            "exam_mark": 60.0
+        },
+        "reason": "filling ic",
+        "modified_at": "2025-06-22T13:14:01.949Z"
+    }
+},
+{
+    "model": "result_system.resultmodificationlog",
+    "pk": 33,
+    "fields": {
+        "submitted_result_score": 51,
+        "modified_by": [
+            "co"
+        ],
+        "old_data": {
+            "ca_slot1": null,
+            "ca_slot2": null,
+            "exam_mark": null
+        },
+        "new_data": {
+            "ca_slot1": 12.0,
+            "ca_slot2": 15.0,
+            "exam_mark": 50.0
+        },
+        "reason": "filling ic",
+        "modified_at": "2025-06-22T13:16:50.768Z"
+    }
+},
+{
+    "model": "result_system.resultmodificationlog",
+    "pk": 34,
+    "fields": {
+        "submitted_result_score": 52,
+        "modified_by": [
+            "co"
+        ],
+        "old_data": {
+            "ca_slot1": null,
+            "ca_slot3": null,
+            "exam_mark": null
+        },
+        "new_data": {
+            "ca_slot1": 10.0,
+            "ca_slot3": 20.0,
+            "exam_mark": 60.0
+        },
+        "reason": "filling ic",
+        "modified_at": "2025-06-22T20:18:00.312Z"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 1,
+    "fields": {
+        "action_time": "2025-05-27T16:49:06.173Z",
+        "user": [
+            "mave"
+        ],
+        "content_type": [
+            "core",
+            "user"
+        ],
+        "object_id": "1",
+        "object_repr": "cs_lect",
+        "action_flag": 2,
+        "change_message": "[{\"changed\": {\"fields\": [\"password\"]}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 2,
+    "fields": {
+        "action_time": "2025-05-27T17:14:35.259Z",
+        "user": [
+            "mave"
+        ],
+        "content_type": [
+            "auth",
+            "group"
+        ],
+        "object_id": "1",
+        "object_repr": "DRO",
+        "action_flag": 1,
+        "change_message": "[{\"added\": {}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 3,
+    "fields": {
+        "action_time": "2025-05-27T19:06:26.867Z",
+        "user": [
+            "mave"
+        ],
+        "content_type": [
+            "core",
+            "user"
+        ],
+        "object_id": "4",
+        "object_repr": "cs_dro",
+        "action_flag": 2,
+        "change_message": "[{\"changed\": {\"fields\": [\"Groups\"]}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 4,
+    "fields": {
+        "action_time": "2025-05-27T19:06:45.611Z",
+        "user": [
+            "mave"
+        ],
+        "content_type": [
+            "core",
+            "user"
+        ],
+        "object_id": "5",
+        "object_repr": "ee_dro",
+        "action_flag": 2,
+        "change_message": "[{\"changed\": {\"fields\": [\"Groups\"]}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 5,
+    "fields": {
+        "action_time": "2025-05-27T19:43:22.787Z",
+        "user": [
+            "mave"
+        ],
+        "content_type": [
+            "core",
+            "user"
+        ],
+        "object_id": "4",
+        "object_repr": "cs_dro",
+        "action_flag": 2,
+        "change_message": "[{\"changed\": {\"fields\": [\"password\"]}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 6,
+    "fields": {
+        "action_time": "2025-05-27T20:03:41.422Z",
+        "user": [
+            "mave"
+        ],
+        "content_type": [
+            "auth",
+            "group"
+        ],
+        "object_id": "2",
+        "object_repr": "Lecturer",
+        "action_flag": 1,
+        "change_message": "[{\"added\": {}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 7,
+    "fields": {
+        "action_time": "2025-05-27T20:03:59.214Z",
+        "user": [
+            "mave"
+        ],
+        "content_type": [
+            "core",
+            "user"
+        ],
+        "object_id": "1",
+        "object_repr": "cs_lect",
+        "action_flag": 2,
+        "change_message": "[{\"changed\": {\"fields\": [\"Groups\"]}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 8,
+    "fields": {
+        "action_time": "2025-05-27T20:04:15.008Z",
+        "user": [
+            "mave"
+        ],
+        "content_type": [
+            "core",
+            "user"
+        ],
+        "object_id": "2",
+        "object_repr": "ee_lect",
+        "action_flag": 2,
+        "change_message": "[{\"changed\": {\"fields\": [\"Groups\"]}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 9,
+    "fields": {
+        "action_time": "2025-05-27T20:04:33.592Z",
+        "user": [
+            "mave"
+        ],
+        "content_type": [
+            "core",
+            "user"
+        ],
+        "object_id": "3",
+        "object_repr": "math_lect",
+        "action_flag": 2,
+        "change_message": "[{\"changed\": {\"fields\": [\"Groups\"]}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 10,
+    "fields": {
+        "action_time": "2025-05-28T04:25:49.786Z",
+        "user": [
+            "mave"
+        ],
+        "content_type": [
+            "core",
+            "user"
+        ],
+        "object_id": "5",
+        "object_repr": "ee_dro",
+        "action_flag": 2,
+        "change_message": "[{\"changed\": {\"fields\": [\"password\"]}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 11,
+    "fields": {
+        "action_time": "2025-05-30T04:34:07.598Z",
+        "user": [
+            "mave"
+        ],
+        "content_type": [
+            "auth",
+            "group"
+        ],
+        "object_id": "2",
+        "object_repr": "Lecturer",
+        "action_flag": 2,
+        "change_message": "[{\"changed\": {\"fields\": [\"Permissions\"]}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 12,
+    "fields": {
+        "action_time": "2025-06-12T16:10:13.658Z",
+        "user": [
+            "mave"
+        ],
+        "content_type": [
+            "core",
+            "user"
+        ],
+        "object_id": "4",
+        "object_repr": "cs_dro",
+        "action_flag": 2,
+        "change_message": "[{\"changed\": {\"fields\": [\"Is lecturer\", \"Is dro\"]}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 13,
+    "fields": {
+        "action_time": "2025-06-12T16:10:29.295Z",
+        "user": [
+            "mave"
+        ],
+        "content_type": [
+            "core",
+            "user"
+        ],
+        "object_id": "1",
+        "object_repr": "cs_lect",
+        "action_flag": 2,
+        "change_message": "[{\"changed\": {\"fields\": [\"Is lecturer\"]}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 14,
+    "fields": {
+        "action_time": "2025-06-12T16:10:46.243Z",
+        "user": [
+            "mave"
+        ],
+        "content_type": [
+            "core",
+            "user"
+        ],
+        "object_id": "5",
+        "object_repr": "ee_dro",
+        "action_flag": 2,
+        "change_message": "[{\"changed\": {\"fields\": [\"Is lecturer\", \"Is dro\"]}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 15,
+    "fields": {
+        "action_time": "2025-06-12T16:10:58.419Z",
+        "user": [
+            "mave"
+        ],
+        "content_type": [
+            "core",
+            "user"
+        ],
+        "object_id": "2",
+        "object_repr": "ee_lect",
+        "action_flag": 2,
+        "change_message": "[{\"changed\": {\"fields\": [\"Is lecturer\"]}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 16,
+    "fields": {
+        "action_time": "2025-06-12T16:11:17.626Z",
+        "user": [
+            "mave"
+        ],
+        "content_type": [
+            "core",
+            "user"
+        ],
+        "object_id": "6",
+        "object_repr": "eng_fro",
+        "action_flag": 2,
+        "change_message": "[{\"changed\": {\"fields\": [\"Is lecturer\", \"Is fro\"]}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 17,
+    "fields": {
+        "action_time": "2025-06-12T16:11:47.891Z",
+        "user": [
+            "mave"
+        ],
+        "content_type": [
+            "core",
+            "user"
+        ],
+        "object_id": "3",
+        "object_repr": "math_lect",
+        "action_flag": 2,
+        "change_message": "[{\"changed\": {\"fields\": [\"Is lecturer\"]}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 18,
+    "fields": {
+        "action_time": "2025-06-12T16:12:26.212Z",
+        "user": [
+            "mave"
+        ],
+        "content_type": [
+            "core",
+            "user"
+        ],
+        "object_id": "7",
+        "object_repr": "sci_fro",
+        "action_flag": 2,
+        "change_message": "[{\"changed\": {\"fields\": [\"Is lecturer\", \"Is fro\"]}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 19,
+    "fields": {
+        "action_time": "2025-06-13T04:25:41.187Z",
+        "user": [
+            "mave"
+        ],
+        "content_type": [
+            "result_system",
+            "profile"
+        ],
+        "object_id": "1",
+        "object_repr": "Profile object (1)",
+        "action_flag": 1,
+        "change_message": "[{\"added\": {}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 20,
+    "fields": {
+        "action_time": "2025-06-13T04:25:51.446Z",
+        "user": [
+            "mave"
+        ],
+        "content_type": [
+            "result_system",
+            "profile"
+        ],
+        "object_id": "2",
+        "object_repr": "Profile object (2)",
+        "action_flag": 1,
+        "change_message": "[{\"added\": {}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 21,
+    "fields": {
+        "action_time": "2025-06-13T04:26:06.961Z",
+        "user": [
+            "mave"
+        ],
+        "content_type": [
+            "result_system",
+            "profile"
+        ],
+        "object_id": "3",
+        "object_repr": "Profile object (3)",
+        "action_flag": 1,
+        "change_message": "[{\"added\": {}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 22,
+    "fields": {
+        "action_time": "2025-06-13T04:26:18.859Z",
+        "user": [
+            "mave"
+        ],
+        "content_type": [
+            "result_system",
+            "profile"
+        ],
+        "object_id": "4",
+        "object_repr": "Profile object (4)",
+        "action_flag": 1,
+        "change_message": "[{\"added\": {}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 23,
+    "fields": {
+        "action_time": "2025-06-13T04:26:35.042Z",
+        "user": [
+            "mave"
+        ],
+        "content_type": [
+            "result_system",
+            "profile"
+        ],
+        "object_id": "5",
+        "object_repr": "Profile object (5)",
+        "action_flag": 1,
+        "change_message": "[{\"added\": {}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 24,
+    "fields": {
+        "action_time": "2025-06-13T04:26:50.129Z",
+        "user": [
+            "mave"
+        ],
+        "content_type": [
+            "result_system",
+            "profile"
+        ],
+        "object_id": "6",
+        "object_repr": "Profile object (6)",
+        "action_flag": 1,
+        "change_message": "[{\"added\": {}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 25,
+    "fields": {
+        "action_time": "2025-06-13T04:27:06.353Z",
+        "user": [
+            "mave"
+        ],
+        "content_type": [
+            "result_system",
+            "profile"
+        ],
+        "object_id": "7",
+        "object_repr": "Profile object (7)",
+        "action_flag": 1,
+        "change_message": "[{\"added\": {}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 26,
+    "fields": {
+        "action_time": "2025-06-13T04:51:02.284Z",
+        "user": [
+            "mave"
+        ],
+        "content_type": [
+            "core",
+            "user"
+        ],
+        "object_id": "5",
+        "object_repr": "ee_dro",
+        "action_flag": 2,
+        "change_message": "[{\"changed\": {\"fields\": [\"password\"]}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 27,
+    "fields": {
+        "action_time": "2025-06-13T05:14:01.397Z",
+        "user": [
+            "mave"
+        ],
+        "content_type": [
+            "auth",
+            "group"
+        ],
+        "object_id": "1",
+        "object_repr": "DRO",
+        "action_flag": 2,
+        "change_message": "[{\"changed\": {\"fields\": [\"Permissions\"]}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 28,
+    "fields": {
+        "action_time": "2025-06-13T05:29:25.579Z",
+        "user": [
+            "mave"
+        ],
+        "content_type": [
+            "core",
+            "user"
+        ],
+        "object_id": "7",
+        "object_repr": "sci_fro",
+        "action_flag": 2,
+        "change_message": "[{\"changed\": {\"fields\": [\"password\"]}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 29,
+    "fields": {
+        "action_time": "2025-06-14T16:15:57.247Z",
+        "user": [
+            "mave"
+        ],
+        "content_type": [
+            "core",
+            "user"
+        ],
+        "object_id": "7",
+        "object_repr": "sci_fro",
+        "action_flag": 2,
+        "change_message": "[{\"changed\": {\"fields\": [\"Groups\"]}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 30,
+    "fields": {
+        "action_time": "2025-06-14T16:16:30.112Z",
+        "user": [
+            "mave"
+        ],
+        "content_type": [
+            "core",
+            "user"
+        ],
+        "object_id": "6",
+        "object_repr": "eng_fro",
+        "action_flag": 2,
+        "change_message": "[{\"changed\": {\"fields\": [\"Groups\"]}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 31,
+    "fields": {
+        "action_time": "2025-06-14T16:16:54.043Z",
+        "user": [
+            "mave"
+        ],
+        "content_type": [
+            "auth",
+            "group"
+        ],
+        "object_id": "1",
+        "object_repr": "Result Approvals",
+        "action_flag": 2,
+        "change_message": "[{\"changed\": {\"fields\": [\"Name\"]}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 32,
+    "fields": {
+        "action_time": "2025-06-14T16:21:40.433Z",
+        "user": [
+            "mave"
+        ],
+        "content_type": [
+            "auth",
+            "group"
+        ],
+        "object_id": "3",
+        "object_repr": "CO",
+        "action_flag": 1,
+        "change_message": "[{\"added\": {}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 33,
+    "fields": {
+        "action_time": "2025-06-14T16:24:37.952Z",
+        "user": [
+            "mave"
+        ],
+        "content_type": [
+            "core",
+            "user"
+        ],
+        "object_id": "8",
+        "object_repr": "co",
+        "action_flag": 2,
+        "change_message": "[{\"changed\": {\"fields\": [\"Is co\"]}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 34,
+    "fields": {
+        "action_time": "2025-06-14T16:27:16.998Z",
+        "user": [
+            "mave"
+        ],
+        "content_type": [
+            "core",
+            "user"
+        ],
+        "object_id": "8",
+        "object_repr": "co",
+        "action_flag": 2,
+        "change_message": "[{\"changed\": {\"fields\": [\"password\"]}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 35,
+    "fields": {
+        "action_time": "2025-06-14T16:27:34.781Z",
+        "user": [
+            "mave"
+        ],
+        "content_type": [
+            "core",
+            "user"
+        ],
+        "object_id": "8",
+        "object_repr": "co",
+        "action_flag": 2,
+        "change_message": "[{\"changed\": {\"fields\": [\"Groups\"]}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 36,
+    "fields": {
+        "action_time": "2025-06-14T16:34:12.387Z",
+        "user": [
+            "mave"
+        ],
+        "content_type": [
+            "auth",
+            "group"
+        ],
+        "object_id": "3",
+        "object_repr": "CO",
+        "action_flag": 2,
+        "change_message": "[{\"changed\": {\"fields\": [\"Permissions\"]}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 37,
+    "fields": {
+        "action_time": "2025-06-14T16:36:25.895Z",
+        "user": [
+            "mave"
+        ],
+        "content_type": [
+            "auth",
+            "group"
+        ],
+        "object_id": "3",
+        "object_repr": "CO",
+        "action_flag": 2,
+        "change_message": "[{\"changed\": {\"fields\": [\"Permissions\"]}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 38,
+    "fields": {
+        "action_time": "2025-06-17T23:12:28.588Z",
+        "user": [
+            "mave"
+        ],
+        "content_type": [
+            "auth",
+            "group"
+        ],
+        "object_id": "2",
+        "object_repr": "Lecturer",
+        "action_flag": 2,
+        "change_message": "[{\"changed\": {\"fields\": [\"Permissions\"]}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 39,
+    "fields": {
+        "action_time": "2025-06-17T23:13:20.156Z",
+        "user": [
+            "mave"
+        ],
+        "content_type": [
+            "auth",
+            "group"
+        ],
+        "object_id": "1",
+        "object_repr": "Result Approvals",
+        "action_flag": 2,
+        "change_message": "[]"
+    }
+}
+]
