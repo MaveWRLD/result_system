@@ -86,3 +86,7 @@ def send_lecturer_email_for_result_modification(sender, **kwargs):
         logger.warning("BadHeaderError prevented email sending")
     except Exception as e:  # Catch all other errors
         logger.error(f"Email failed: {str(e)}", exc_info=True)
+
+@receiver(post_save, sender=ResultModificationLog)
+def your_handler(sender, instance, **kwargs):
+    logger.critical("SIGNAL FIRED!")
