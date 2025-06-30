@@ -9,7 +9,7 @@ import logging
 logger = logging.getLogger(__name__)
 
 
-@receiver(post_save, sender=Result)
+@receiver(post_save, sender=Result,  weak=False)
 def create_assessment_for_students_in_result(sender, **kwargs):
     instance = kwargs['instance']
     course = instance.course
@@ -20,7 +20,7 @@ def create_assessment_for_students_in_result(sender, **kwargs):
         Assessment.objects.bulk_create(assessment_create)
 
 
-@receiver(post_save, sender=ResultModificationLog)
+@receiver(post_save, sender=ResultModificationLog,  weak=False)
 def send_lecturer_email_for_result_modification(sender, **kwargs):
     if not kwargs.get('created'):
         return  # Only send for new instances
