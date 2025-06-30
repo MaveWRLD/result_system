@@ -84,3 +84,5 @@ def send_lecturer_email_for_result_modification(sender, **kwargs):
         message.send([lecturer.email])
     except BadHeaderError:
         logger.warning("BadHeaderError prevented email sending")
+    except Exception as e:  # Catch all other errors
+        logger.error(f"Email failed: {str(e)}", exc_info=True)
