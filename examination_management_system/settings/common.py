@@ -43,7 +43,7 @@ INSTALLED_APPS = [
     # app
     # 'audit',
     'core',
-    'result_system',
+    'result_system.apps.ResultSystemConfig',
 ]
 
 MIDDLEWARE = [

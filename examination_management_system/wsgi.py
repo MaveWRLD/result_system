@@ -12,7 +12,6 @@ import os
 from django.core.wsgi import get_wsgi_application
 from decouple import config
 
-#config('DJANGO_SETTINGS_MODULE', default='examination_management_system.settings.dev')
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'examination_management_system.settings.dev')
 
 application = get_wsgi_application()
