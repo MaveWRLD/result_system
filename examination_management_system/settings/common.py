@@ -65,8 +65,9 @@ INTERNAL_IPS = [
 
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:8080",
-    "http://127.0.0.1:9000",
+    "http://localhost:3000",
 ]
+
 
 ROOT_URLCONF = 'examination_management_system.urls'
 
