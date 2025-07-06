@@ -12,7 +12,6 @@ drf-nested-routers = "*"
 django-filter = "*"
 djoser = "*"
 djangorestframework-simplejwt = "*"
-python-decouple = "*"
 whitenoise = "*"
 gunicorn = "*"
 django-cors-headers = "*"
@@ -20,6 +19,7 @@ django-templated-mail = "*"
 drf-spectacular = "*"
 psycopg2-binary = "*"
 dj-database-url = "*"
+python-decouple = "*"
 
 [dev-packages]
 
