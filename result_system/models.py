@@ -1,8 +1,8 @@
-from django.db import models
-from django.core.validators import MaxValueValidator, MinValueValidator
 from django.conf import settings
-from django.forms import ValidationError
 from django.core.exceptions import ValidationError
+from django.core.validators import MaxValueValidator, MinValueValidator
+from django.db import models
+from django.forms import ValidationError
 
 
 class Faculty(models.Model):
@@ -22,9 +22,11 @@ class Department(models.Model):
 
 class Profile(models.Model):
     user = models.OneToOneField(
-        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='profiles')
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="profiles"
+    )
     department = models.ForeignKey(
-        Department, on_delete=models.CASCADE, null=True, blank=True)
+        Department, on_delete=models.CASCADE, null=True, blank=True
+    )
 
 
 class Program(models.Model):
@@ -51,37 +53,42 @@ class Course(models.Model):
     name = models.CharField(max_length=255)
     program = models.ForeignKey(Program, on_delete=models.CASCADE)
     credit = models.PositiveBigIntegerField(
-        validators=[MinValueValidator(1), MaxValueValidator(3)])
+        validators=[MinValueValidator(1), MaxValueValidator(3)]
+    )
     lecturer = models.ForeignKey(
-        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, blank=True, related_name="courses")
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        blank=True,
+        related_name="courses",
+    )
 
     def __str__(self):
         return f"{self.code} - {self.name}"
 
 
 class Enrollment(models.Model):
-    student = models.ForeignKey(Student,
-                                on_delete=models.CASCADE,
-                                related_name='enrolled_student'
-                                )
-    course = models.ForeignKey(Course,
-                               on_delete=models.CASCADE,
-                               related_name='enrolled_course'
-                               )
+    student = models.ForeignKey(
+        Student, on_delete=models.CASCADE, related_name="enrolled_student"
+    )
+    course = models.ForeignKey(
+        Course, on_delete=models.CASCADE, related_name="enrolled_course"
+    )
     academic_year = models.IntegerField()  # e.g., 2025
-    semester = models.CharField(max_length=10, choices=[(
-        "Sem1", "Semester 1"), ("Sem2", "Semester 2")])
+    semester = models.CharField(
+        max_length=10, choices=[("Sem1", "Semester 1"), ("Sem2", "Semester 2")]
+    )
 
     class Meta:
-        unique_together = [('student', 'course', 'academic_year', 'semester')]
+        unique_together = [("student", "course", "academic_year", "semester")]
 
     def __str__(self):
         return f"{self.student} in {self.course}"
 
 
 class Result(models.Model):
-    course = models.OneToOneField(Course, on_delete=models.CASCADE, related_name='results'
-                                  )
+    course = models.OneToOneField(
+        Course, on_delete=models.CASCADE, related_name="results"
+    )
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     submitted_at = models.DateTimeField(null=True, blank=True)
@@ -90,29 +97,61 @@ class Result(models.Model):
     #    # Ensure lecturer is assigned to the course
     #    if not self.course.lecturer == self.lecturer:
     #        raise ValidationError("Lecturer can only create results for their assigned courses")
+
+
 #
-    # def __str__(self):
-    #    return f"{self.course.code} Results ({self.status})"
+# def __str__(self):
+#    return f"{self.course.code} Results ({self.status})"
+
+
+from django.core.validators import MinValueValidator
 
 
 class Assessment(models.Model):
     result = models.ForeignKey(
-        Result, on_delete=models.CASCADE, related_name='assessments')
+        Result, on_delete=models.CASCADE, related_name="assessments"
+    )
     student = models.ForeignKey(
-        Student, on_delete=models.CASCADE, related_name='students_assessment')
+        Student, on_delete=models.CASCADE, related_name="students_assessment"
+    )
     ca_slot1 = models.DecimalField(
-        max_digits=5, decimal_places=2, null=True, blank=True)
+        max_digits=5,
+        decimal_places=2,
+        null=True,
+        blank=True,
+        validators=[MinValueValidator(0)],
+    )
     ca_slot2 = models.DecimalField(
-        max_digits=5, decimal_places=2, null=True, blank=True)
+        max_digits=5,
+        decimal_places=2,
+        null=True,
+        blank=True,
+        validators=[MinValueValidator(0)],
+    )
     ca_slot3 = models.DecimalField(
-        max_digits=5, decimal_places=2, null=True, blank=True)
+        max_digits=5,
+        decimal_places=2,
+        null=True,
+        blank=True,
+        validators=[MinValueValidator(0)],
+    )
     ca_slot4 = models.DecimalField(
-        max_digits=5, decimal_places=2, null=True, blank=True)
+        max_digits=5,
+        decimal_places=2,
+        null=True,
+        blank=True,
+        validators=[MinValueValidator(0)],
+    )
     exam_mark = models.DecimalField(
-        max_digits=5, decimal_places=2, null=True, blank=True)
+        max_digits=5,
+        decimal_places=2,
+        null=True,
+        blank=True,
+        validators=[MinValueValidator(0)],
+    )
 
     class Meta:
-        unique_together = ['result', 'student']
+        unique_together = ["result", "student"]
 
     def clean(self):
         #    # Validate CA marks sum <= 40
@@ -127,8 +166,7 @@ class Assessment(models.Model):
         #
         # Ensure student is enrolled in the course
         if not Enrollment.objects.filter(
-            student=self.student,
-            course=self.result.course
+            student=self.student, course=self.result.course
         ).exists():
             raise ValidationError("Student is not enrolled in this course")
 
@@ -142,50 +180,59 @@ class Assessment(models.Model):
 
 class SubmittedResult(models.Model):
     RESULT_STATUS = [
-        ('D', 'Draft'),
-        ('P_D', 'Pending Department'),
-        ('P_F', 'Pending Faculty'),
-        ('A', 'Approved'),
-        ('R', 'Rejected'),
-
+        ("D", "Draft"),
+        ("P_D", "Pending Department"),
+        ("P_F", "Pending Faculty"),
+        ("A", "Approved"),
+        ("R", "Rejected"),
     ]
     course = models.ForeignKey(
-        Course, on_delete=models.CASCADE, related_name='submitted_results')
+        Course, on_delete=models.CASCADE, related_name="submitted_results"
+    )
     submitted_at = models.DateField(auto_now_add=True)
     result_status = models.CharField(
-        max_length=50, choices=RESULT_STATUS, default='P_D')
-    lecturer = models.ForeignKey(
-        settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+        max_length=50, choices=RESULT_STATUS, default="P_D"
+    )
+    lecturer = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
 
     def __str__(self):
-        return f'Result for {self.course} by {self.lecturer}'
+        return f"Result for {self.course} by {self.lecturer}"
 
     class Meta:
-        unique_together = ['course', 'lecturer']
+        unique_together = ["course", "lecturer"]
 
 
 class SubmittedResultScore(models.Model):
     submitted_result = models.ForeignKey(
-        SubmittedResult, on_delete=models.CASCADE, related_name='result_scores')
+        SubmittedResult, on_delete=models.CASCADE, related_name="result_scores"
+    )
     student = models.ForeignKey(
-        Student, on_delete=models.CASCADE, related_name='students_score')
+        Student, on_delete=models.CASCADE, related_name="students_score"
+    )
     ca_slot1 = models.DecimalField(
-        max_digits=5, decimal_places=2, null=True, blank=True)
+        max_digits=5, decimal_places=2, null=True, blank=True
+    )
     ca_slot2 = models.DecimalField(
-        max_digits=5, decimal_places=2, null=True, blank=True)
+        max_digits=5, decimal_places=2, null=True, blank=True
+    )
     ca_slot3 = models.DecimalField(
-        max_digits=5, decimal_places=2, null=True, blank=True)
+        max_digits=5, decimal_places=2, null=True, blank=True
+    )
     ca_slot4 = models.DecimalField(
-        max_digits=5, decimal_places=2, null=True, blank=True)
+        max_digits=5, decimal_places=2, null=True, blank=True
+    )
     exam_mark = models.DecimalField(
-        max_digits=5, decimal_places=2, null=True, blank=True)
+        max_digits=5, decimal_places=2, null=True, blank=True
+    )
 
 
 class ResultModificationLog(models.Model):
     submitted_result_score = models.ForeignKey(
-        SubmittedResultScore, on_delete=models.CASCADE, related_name="modification_logs")
+        SubmittedResultScore, on_delete=models.CASCADE, related_name="modification_logs"
+    )
     modified_by = models.ForeignKey(
-        settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True)
+        settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True
+    )
     old_data = models.JSONField()  # Stores previous CA/exam values
     new_data = models.JSONField()
     reason = models.TextField()
@@ -193,5 +240,6 @@ class ResultModificationLog(models.Model):
 
     def __str__(self):
         return f"Modification by {self.modified_by} on {self.modified_at}"
+
 
 # Create your models here.
