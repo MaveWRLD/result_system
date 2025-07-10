@@ -78,34 +78,44 @@ class ResultViewSet(ModelViewSet):
         return {"course_id": self.kwargs["course_pk"]}
 
 
-class AssessmentViewSet(ListModelMixin, RetrieveModelMixin, UpdateModelMixin, GenericViewSet):
+class AssessmentViewSet(
+    ListModelMixin, RetrieveModelMixin, UpdateModelMixin, GenericViewSet
+):
     serializer_class = AssessmentSerializer
 
     def get_queryset(self):
         result_id = self.kwargs.get("result_pk")
-        queryset = Assessment.objects.filter(result_id=result_id)\
-            .select_related('result__course', 'student')\
+        queryset = (
+            Assessment.objects.filter(result_id=result_id)
+            .select_related("result__course", "student")
             .prefetch_related(
-                Prefetch('student__enrolled_student',
-                       queryset=Enrollment.objects.select_related('course'))
+                Prefetch(
+                    "student__enrolled_student",
+                    queryset=Enrollment.objects.select_related("course"),
+                )
             )
-        
+        )
+
         # Cache the result object for serializer context
         if queryset.exists():
             result = queryset.first().result
             result.prefetched_assessments = queryset
             self._cached_result = result
         else:
-            self._cached_result = Result.objects.select_related('course').get(pk=result_id)
-            
+            self._cached_result = Result.objects.select_related("course").get(
+                pk=result_id
+            )
+
         return queryset
 
     def get_serializer_context(self):
         context = super().get_serializer_context()
-        context.update({
-            "result": getattr(self, '_cached_result', None),
-            "result_id": self.kwargs.get("result_pk")
-        })
+        context.update(
+            {
+                "result": getattr(self, "_cached_result", None),
+                "result_id": self.kwargs.get("result_pk"),
+            }
+        )
         return context
 
 
@@ -146,9 +156,14 @@ class SubmittedResultViewSet(
 class SubmittedResultScoreViewSet(
     ListModelMixin, RetrieveModelMixin, UpdateModelMixin, GenericViewSet
 ):
-    queryset = SubmittedResultScore.objects.all().order_by("student_id")
     serializer_class = SubmittedResultScoreSerializer
     permission_classes = [DjangoModelPermissions]
+
+    def get_queryset(self):
+        submitted_result_id = self.kwargs["submitted_result_pk"]
+        return SubmittedResultScore.objects.filter(
+            submitted_result_id=submitted_result_id
+        ).order_by("student_id")
 
     def decimal_to_float(self, value):
         """Convert Decimal to float for JSON serialization"""
