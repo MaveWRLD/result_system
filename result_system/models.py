@@ -185,55 +185,6 @@ class Assessment(models.Model):
         return f"{self.student.name} - {self.result.course.code}"
 
 
-# class SubmittedResult(models.Model):
-#    RESULT_STATUS = [
-#        ("D", "Draft"),
-#        ("P_D", "Pending Department"),
-#        ("P_F", "Pending Faculty"),
-#        ("A", "Approved"),
-#        ("R", "Rejected"),
-#    ]
-#    course = models.ForeignKey(
-#        Course, on_delete=models.CASCADE, related_name="submitted_results"
-#    )
-#    submitted_at = models.DateField(auto_now_add=True)
-#    result_status = models.CharField(
-#        max_length=50, choices=RESULT_STATUS, default="P_D"
-#    )
-#    lecturer = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-#
-#    def __str__(self):
-#        return f"Result for {self.course} by {self.lecturer}"
-#
-#    class Meta:
-#        unique_together = ["course", "lecturer"]
-#
-#
-# class SubmittedResultScore(models.Model):
-#    submitted_result = models.ForeignKey(
-#        SubmittedResult, on_delete=models.CASCADE, related_name="result_scores"
-#    )
-#    student = models.ForeignKey(
-#        Student, on_delete=models.CASCADE, related_name="students_score"
-#    )
-#    ca_slot1 = models.DecimalField(
-#        max_digits=5, decimal_places=2, null=True, blank=True
-#    )
-#    ca_slot2 = models.DecimalField(
-#        max_digits=5, decimal_places=2, null=True, blank=True
-#    )
-#    ca_slot3 = models.DecimalField(
-#        max_digits=5, decimal_places=2, null=True, blank=True
-#    )
-#    ca_slot4 = models.DecimalField(
-#        max_digits=5, decimal_places=2, null=True, blank=True
-#    )
-#    exam_mark = models.DecimalField(
-#        max_digits=5, decimal_places=2, null=True, blank=True
-#    )
-#
-
-
 class ResultModificationLog(models.Model):
     assessment = models.ForeignKey(
         Assessment, on_delete=models.CASCADE, related_name="modification_logs"

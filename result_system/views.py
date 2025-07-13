@@ -333,7 +333,7 @@ class AssessmentViewSet(
 class ResultModificationLogViewSet(ListModelMixin, RetrieveModelMixin, GenericViewSet):
     serializer_class = ResultModificationLogSerializer
     queryset = ResultModificationLog.objects.all().select_related(
-        "modified_by", "submitted_result_score", "submitted_result_score__student"
+        "modified_by", "assessment", "submitted_result_score__student"
     )
 
     # filter_backends = [DjangoFilterBackend]
