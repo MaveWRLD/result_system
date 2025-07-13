@@ -1,61 +1,103 @@
 from rest_framework import permissions
 
-
-class HasRole(permissions.BasePermission):
-    message = "You do not have permission to perform this action"
-    required_roles = []
-
-    def has_permission(self, request, view):
-        user = request.user
-        if not user or not user.is_authenticated:
-            return False
-        return user.user_roles.filter(role__name__in=self.required_roles).exists()
+from result_system.models import Result
 
 
-class IsAdminOrReadOnly(permissions.BasePermission):
-    def has_permission(self, request, view):
+class IsResultDraft(permissions.BasePermission):
+    def has_object_permission(self, request, view, obj):
         if request.method in permissions.SAFE_METHODS:
             return True
-        return bool(request.user and request.user.is_staff)
+        if view.action == "submit":
+            return True
+        if "status" in request.data:
+            current_status = obj.status
+            print(current_status)
+            new_status = request.data["status"]
+            print(new_status)
+            if current_status != "D":
+                return False
+            if new_status != "P_D":
+                return False
+            return True
 
-# class IsDRO(HasRole):
-#    required_roles = 'DRO'
+    def _is_lecturer(self, user):
+        return hasattr(user) and user.is_lecturer
 
 
-class IsFRO(HasRole):
-    message = "You do not have permission to perform this action"
-    required_roles = []
-
+class CanCreateResult(permissions.BasePermission):
     def has_permission(self, request, view):
-        user = request.user
-        if not user or not user.is_authenticated:
+        if request.method != "POST":
+            return True
+        course_pk = view.kwargs.get("course_pk")
+        if not course_pk:
             return False
-        return user.is_fro
-
-
-class IsCO(HasRole):
-    message = "You do not have permission to perform this action"
-    required_roles = []
-
-    def has_permission(self, request, view):
-        user = request.user
-        if not user or not user.is_authenticated:
+        if Result.objects.filter(course_id=course_pk).exists():
             return False
-        return user.is_co
+        return True
+
+    def has_object_permission(self, request, view, obj):
+        return request.user.is_authenticated
 
 
-class IsDRO(permissions.BasePermission):
-    message = "You do not have permission to perform this action"
-    required_roles = []
+class IsResultAssessmentDraft(permissions.BasePermission):
+    message = "Result can not be changed when submitted. Request to DRO for changes"
 
-    def has_permission(self, request, view):
+    def has_object_permission(self, request, view, obj):
         user = request.user
-        if not user or not user.is_authenticated:
-            return False
-        return user.is_dro
-    
 
-class IsCourseLecturer(permissions.BasePermission):
-    def has_permission(self, request, view):
-        course_id = view.kwargs.get['course_pk']
-        return request.user.courses.filter(id=course_id)
+        if request.method in permissions.SAFE_METHODS:
+            return True
+        if user.is_co:
+            return True
+        if obj.result.status == "D":
+            return True
+
+
+class ViewResultRoles(permissions.BasePermission):
+    message = "You are not authorized to make this status change"
+
+    def has_object_permission(self, request, view, obj):
+        # Always allow safe methods (GET, HEAD, OPTIONS)
+        user = request.user
+
+        if request.method in permissions.SAFE_METHODS:
+            return True
+
+        # Only allow status changes via PATCH/PUT
+        if request.method not in ["PATCH", "PUT"]:
+            return True
+
+        # Get the requested new status
+        new_status = request.data.get("status")
+        if not new_status:
+            return True  # Not changing status
+
+        # Get user role
+        user = request.user
+        current_status = obj.status
+
+        # Define allowed transitions for each role
+        allowed_transitions = {
+            "dro": {"P_D": ["P_F", "D"]},
+            "fro": {"P_F": ["A", "P_D"]},
+            "co": {},  # CO can't make any status changes
+        }
+
+        # Check if user has permission for this transition
+        for role, transitions in allowed_transitions.items():
+            if getattr(user, f"is_{role}", False):
+                if current_status in transitions:
+                    return new_status in transitions[current_status]
+                return False  # No transitions allowed for current status
+
+        return False  # No matching role found
+
+
+class RoleBasedStatusChangePermission(permissions.BasePermission):
+    """
+    Allows status changes only according to role-specific transitions:
+    - Lecturers: Can only change from DRAFT (D) to PENDING_DEPARTMENT (P_D)
+    - DRO: Can change from P_D to PENDING_FACULTY (P_F) or REJECTED (R)
+    - FRO: Can change from P_F to APPROVED (A) or REJECTED (R)
+    - CO: Can only view approved results (no status changes)
+    """
