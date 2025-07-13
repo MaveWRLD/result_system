@@ -235,9 +235,9 @@ class Assessment(models.Model):
 
 
 class ResultModificationLog(models.Model):
-    # submitted_result_score = models.ForeignKey(
-    #    SubmittedResultScore, on_delete=models.CASCADE, related_name="modification_logs"
-    # )
+    assessment = models.ForeignKey(
+        Assessment, on_delete=models.CASCADE, related_name="modification_logs"
+    )
     modified_by = models.ForeignKey(
         settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True
     )

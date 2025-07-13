@@ -132,7 +132,7 @@ class AssessmentViewSet(
     permission_classes = [IsResultAssessmentDraft]
 
     def get_queryset(self):
-        result_id = self.kwargs.get("result_pk")
+        #        read_only_fields = ("id", "submitted_result_id", "student_id")
         user = self.request.user
         dro = user.is_dro
         fro = user.is_fro
@@ -169,192 +169,165 @@ class AssessmentViewSet(
         )
         return context
 
+    def decimal_to_float(self, value):
+        """Convert Decimal to float for JSON serialization"""
+        if isinstance(value, Decimal):
+            return float(value)
+        return value
 
-# class SubmittedResultViewSet(
-#    ListModelMixin, RetrieveModelMixin, UpdateModelMixin, GenericViewSet
-# ):
-#    queryset = SubmittedResult.objects.all()
-#    permission_classes = [DjangoModelPermissions]
-#
-#    def get_queryset(self):
-#        user = self.request.user
-#        dro_role = user.is_dro
-#        fro_role = user.is_fro
-#        co_role = user.is_co
-#        lecturer_roles = user.is_lecturer
-#        if dro_role:
-#            return SubmittedResult.objects.filter(
-#                lecturer__profiles__department=user.profiles.department,
-#                result_status="P_D",
-#            )
-#        if fro_role:
-#            return SubmittedResult.objects.filter(
-#                lecturer__profiles__department__faculty=user.profiles.department.faculty,
-#                result_status="P_F",
-#            )
-#        if co_role:
-#            return SubmittedResult.objects.filter(result_status="A")
-#        elif lecturer_roles:
-#            return SubmittedResult.objects.filter(lecturer=user.id)
-#
-#    def get_serializer_class(self):
-#        return SubmittedResultSerializer
-#
-#    def get_serializer_context(self):
-#        return {"lecturer_id": self.request.user.id}
-#
+    def get_changes(self, instance, validated_data):
+        """Identify changed fields and return old/new values with None handling"""
+        changes = {}
+        for field, new_value in validated_data.items():
+            # Skip read-only fields
+            if field in self.serializer_class.Meta.read_only_fields:
+                continue
 
-# class SubmittedResultScoreViewSet(
-#    ListModelMixin, RetrieveModelMixin, UpdateModelMixin, GenericViewSet
-# ):
-#    serializer_class = SubmittedResultScoreSerializer
-#    permission_classes = [DjangoModelPermissions]
-#
-#    def get_queryset(self):
-#        submitted_result_id = self.kwargs["submitted_result_pk"]
-#        return SubmittedResultScore.objects.filter(
-#            submitted_result_id=submitted_result_id
-#        ).order_by("student_id")
-#
-#    def decimal_to_float(self, value):
-#        """Convert Decimal to float for JSON serialization"""
-#        if isinstance(value, Decimal):
-#            return float(value)
-#        return value
-#
-#    def get_changes(self, instance, validated_data):
-#        """Identify changed fields and return old/new values"""
-#        changes = {}
-#        for field, new_value in validated_data.items():
-#            # Skip read-only fields
-#            if field in self.serializer_class.Meta.read_only_fields:
-#                continue
-#
-#            old_value = getattr(instance, field)
-#
-#            # Convert Decimals for proper comparison
-#            if isinstance(old_value, Decimal) or isinstance(new_value, Decimal):
-#                old_value = self.decimal_to_float(old_value)
-#                new_value = self.decimal_to_float(new_value)
-#
-#            if old_value != new_value:
-#                changes[field] = {"old": old_value, "new": new_value}
-#
-#        return changes
-#
-#    @transaction.atomic
-#    def update(self, request, *args, **kwargs):
-#        instance = self.get_object()
-#        serializer = self.get_serializer(instance, data=request.data, partial=True)
-#        serializer.is_valid(raise_exception=True)
-#
-#        # Identify changes before saving
-#        changes = self.get_changes(instance, serializer.validated_data)
-#
-#        # Require reason if changes exist
-#        if changes:
-#            reason = request.data.get("correction_reason")
-#            if not reason:
-#                return Response(
-#                    {"detail": "Correction reason is required when modifying scores"},
-#                    status=status.HTTP_400_BAD_REQUEST,
-#                )
-#            self.perform_update(serializer)
-#
-#            # Create modification log with only changed fields
-#            ResultModificationLog.objects.create(
-#                submitted_result_score=instance,
-#                modified_by=request.user,
-#                old_data={
-#                    field: self.decimal_to_float(change["old"])
-#                    for field, change in changes.items()
-#                },
-#                new_data={
-#                    field: self.decimal_to_float(change["new"])
-#                    for field, change in changes.items()
-#                },
-#                reason=reason,
-#            )
-#
-#            # Return updated data with 200 OK even if there were no significant changes
-#            return Response(serializer.data, status=status.HTTP_200_OK)
-#
-#        # No changes - still return data with 200 OK, just indicating no updates
-#        return Response(
-#            {"detail": "No changes were made."},
-#            status=status.HTTP_200_OK,
-#        )
-#
-#    # Bulk update for multiple scores
-#    @action(detail=False, methods=["patch"], url_path="bulk-update")
-#    def bulk_update(self, request):
-#        updates = request.data.get("scores", [])
-#        reason = request.data.get("correction_reason")
-#
-#        if not isinstance(updates, list):
-#            return Response(
-#                {"detail": "Expected list of score updates"},
-#                status=status.HTTP_400_BAD_REQUEST,
-#            )
-#
-#        if not reason:
-#            return Response(
-#                {"detail": "Correction reason is required for bulk updates"},
-#                status=status.HTTP_400_BAD_REQUEST,
-#            )
-#
-#        results = []
-#        logs = []
-#
-#        with transaction.atomic():
-#            for item in updates:
-#                try:
-#                    instance = SubmittedResultScore.objects.get(id=item["id"])
-#                    serializer = self.get_serializer(instance, data=item, partial=True)
-#                    serializer.is_valid(raise_exception=True)
-#
-#                    # Track changes per score
-#                    changes = self.get_changes(instance, serializer.validated_data)
-#                    if changes:
-#                        serializer.save()
-#
-#                        logs.append(
-#                            ResultModificationLog(
-#                                submitted_result_score=instance,
-#                                modified_by=request.user,
-#                                old_data={
-#                                    f: self.decimal_to_float(c["old"])
-#                                    for f, c in changes.items()
-#                                },
-#                                new_data={
-#                                    f: self.decimal_to_float(c["new"])
-#                                    for f, c in changes.items()
-#                                },
-#                                reason=reason,
-#                            )
-#                        )
-#
-#                        results.append(
-#                            {
-#                                "id": instance.id,
-#                                "status": "updated",
-#                                "changes": list(changes.keys()),
-#                            }
-#                        )
-#                    else:
-#                        results.append({"id": instance.id, "status": "no_changes"})
-#                except SubmittedResultScore.DoesNotExist:
-#                    results.append({"id": item.get("id"), "status": "not_found"})
-#                    continue
-#                except KeyError:
-#                    results.append({"id": item.get("id"), "status": "invalid_data"})
-#                    continue
-#
-#            # Bulk create logs
-#            if logs:
-#                ResultModificationLog.objects.bulk_create(logs)
-#
-#        return Response(results, status=status.HTTP_200_OK)
+            old_value = getattr(instance, field)
+
+            # Handle None values
+            if old_value is None and new_value is None:
+                continue
+
+            # Handle Decimal comparison
+            if isinstance(old_value, Decimal) or isinstance(new_value, Decimal):
+                old_value = float(old_value) if old_value is not None else None
+                new_value = float(new_value) if new_value is not None else None
+
+            # Compare values (including None cases)
+            if old_value != new_value:
+                changes[field] = {"old": old_value, "new": new_value}
+        return changes
+
+    @transaction.atomic
+    def update(self, request, *args, **kwargs):
+        instance = self.get_object()
+        serializer = self.get_serializer(instance, data=request.data, partial=True)
+        serializer.is_valid(raise_exception=True)
+
+        # Get only fields that were actually passed in request
+        updated_fields = set(request.data.keys())
+        filtered_data = {
+            k: v
+            for k, v in serializer.validated_data.items()
+            if k in updated_fields
+            and k not in self.serializer_class.Meta.read_only_fields
+        }
+
+        # Get changes with filtered data
+        changes = self.get_changes(instance, filtered_data)
+        submitted_time = instance.result.submitted_at
+
+        if changes:
+            # Handle post-submission changes
+            if submitted_time:
+                if not request.data.get("correction_reason"):
+                    return Response(
+                        {
+                            "detail": "Correction reason is required when modifying submitted scores"
+                        },
+                        status=status.HTTP_400_BAD_REQUEST,
+                    )
+
+                self.perform_update(serializer)
+
+                ResultModificationLog.objects.create(
+                    assessment=instance,
+                    modified_by=request.user,
+                    old_data={
+                        field: change["old"] for field, change in changes.items()
+                    },
+                    new_data={
+                        field: change["new"] for field, change in changes.items()
+                    },
+                    reason=request.data["correction_reason"],
+                )
+
+                return Response(serializer.data)
+
+            # Handle pre-submission changes
+            self.perform_update(serializer)
+            return Response(serializer.data)
+
+        # No actual changes detected
+        return Response(
+            {
+                "detail": "No changes were made",
+                "hint": "Submitted values match current data or you tried to update read-only fields",
+            },
+            status=status.HTTP_200_OK,
+        )
+
+    # Bulk update for multiple scores
+    @action(detail=False, methods=["patch"], url_path="bulk-update")
+    def bulk_update(self, request):
+        updates = request.data.get("scores", [])
+        reason = request.data.get("correction_reason")
+
+        if not isinstance(updates, list):
+            return Response(
+                {"detail": "Expected list of score updates"},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        if not reason:
+            return Response(
+                {"detail": "Correction reason is required for bulk updates"},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        results = []
+        logs = []
+
+        with transaction.atomic():
+            for item in updates:
+                try:
+                    instance = Assessment.objects.get(id=item["id"])
+                    serializer = self.get_serializer(instance, data=item, partial=True)
+                    serializer.is_valid(raise_exception=True)
+
+                    # Track changes per score
+                    changes = self.get_changes(instance, serializer.validated_data)
+                    if changes:
+                        serializer.save()
+
+                        logs.append(
+                            ResultModificationLog(
+                                assessment=instance,
+                                modified_by=request.user,
+                                old_data={
+                                    f: self.decimal_to_float(c["old"])
+                                    for f, c in changes.items()
+                                },
+                                new_data={
+                                    f: self.decimal_to_float(c["new"])
+                                    for f, c in changes.items()
+                                },
+                                reason=reason,
+                            )
+                        )
+
+                        results.append(
+                            {
+                                "id": instance.id,
+                                "status": "updated",
+                                "changes": list(changes.keys()),
+                            }
+                        )
+                    else:
+                        results.append({"id": instance.id, "status": "no_changes"})
+                except Assessment.DoesNotExist:
+                    results.append({"id": item.get("id"), "status": "not_found"})
+                    continue
+                except KeyError:
+                    results.append({"id": item.get("id"), "status": "invalid_data"})
+                    continue
+
+            # Bulk create logs
+            if logs:
+                ResultModificationLog.objects.bulk_create(logs)
+
+        return Response(results, status=status.HTTP_200_OK)
 
 
 class ResultModificationLogViewSet(ListModelMixin, RetrieveModelMixin, GenericViewSet):
