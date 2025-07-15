@@ -70,7 +70,7 @@ class ResultViewSet(ModelViewSet):
         result.save()
         return Response(
             {
-                "statue": result.status,
+                "status": result.status,
                 "submitted_at": result.submitted_at,
                 "message": "Result submitted successfully for department for approval",
             },
