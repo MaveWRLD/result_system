@@ -50,7 +50,7 @@ class ResultViewSet(ModelViewSet):
     serializer_class = ResultSerializer
     permission_classes = [IsResultDraft, CanCreateResult]
 
-    @action(detail=True, methods=["post", "get"])
+    @action(detail=True, methods=["put", "get"])
     def submit(self, request, course_pk=None, pk=None):
         result = self.get_object()
         if result.course.lecturer.id != request.user.id:
