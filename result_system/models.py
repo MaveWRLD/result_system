@@ -1,3 +1,5 @@
+from decimal import Decimal
+
 from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.core.validators import MaxValueValidator, MinValueValidator
@@ -126,36 +128,46 @@ class Assessment(models.Model):
         decimal_places=2,
         null=True,
         blank=True,
-        validators=[MinValueValidator(0)],
+        validators=[MinValueValidator(0), MaxValueValidator(20)],
     )
     ca_slot2 = models.DecimalField(
         max_digits=5,
         decimal_places=2,
         null=True,
         blank=True,
-        validators=[MinValueValidator(0)],
+        validators=[MinValueValidator(0), MaxValueValidator(20)],
     )
     ca_slot3 = models.DecimalField(
         max_digits=5,
         decimal_places=2,
         null=True,
         blank=True,
-        validators=[MinValueValidator(0)],
+        validators=[MinValueValidator(0), MaxValueValidator(20)],
     )
     ca_slot4 = models.DecimalField(
         max_digits=5,
         decimal_places=2,
         null=True,
         blank=True,
-        validators=[MinValueValidator(0)],
+        validators=[MinValueValidator(0), MaxValueValidator(20)],
     )
     exam_mark = models.DecimalField(
         max_digits=5,
         decimal_places=2,
         null=True,
         blank=True,
-        validators=[MinValueValidator(0)],
+        validators=[MinValueValidator(0), MaxValueValidator(60)],
     )
+    total_score = models.DecimalField(
+        max_digits=5,
+        decimal_places=2,
+        null=True,
+        blank=True,
+        editable=False,  # Prevents manual editing in forms/admin
+    )
+    grade = models.CharField(max_length=2, null=True, blank=True, editable=False)
+
+    # Grading thresholds (adjust as needed)
 
     class Meta:
         unique_together = ["result", "student"]
@@ -178,6 +190,34 @@ class Assessment(models.Model):
             raise ValidationError("Student is not enrolled in this course")
 
     def save(self, *args, **kwargs):
+        if self.exam_mark is not None:
+            # Convert None to Decimal(0) for CA slots
+            ca1 = self.ca_slot1 or Decimal("0")
+            ca2 = self.ca_slot2 or Decimal("0")
+            ca3 = self.ca_slot3 or Decimal("0")
+            ca4 = self.ca_slot4 or Decimal("0")
+
+            self.total_score = ca1 + ca2 + ca3 + ca4 + self.exam_mark
+
+            if self.total_score >= 80:
+                self.grade = "A"
+            elif self.total_score >= 75:
+                self.grade = "B+"
+            elif self.total_score >= 70:
+                self.grade = "B"
+            elif self.total_score >= 65:
+                self.grade = "C+"
+            elif self.total_score >= 60:
+                self.grade = "C"
+            elif self.total_score >= 55:
+                self.grade = "D+"
+            elif self.total_score >= 50:
+                self.grade = "D"
+            else:
+                self.grade = "E"
+        else:
+            self.total_score = None
+            self.grade = "IC"
         self.full_clean()
         super().save(*args, **kwargs)
 
