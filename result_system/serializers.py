@@ -70,6 +70,8 @@ class AssessmentSerializer(serializers.ModelSerializer):
             "ca_slot3",
             "ca_slot4",
             "exam_mark",
+            "total_score",
+            "grade",
         ]
         read_only_fields = ("id", "submitted_result_id", "student_id")
 
