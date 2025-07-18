@@ -1,13 +1,18 @@
 import logging
 
+from django.contrib.auth import get_user_model
 from django.core.mail import BadHeaderError, send_mail
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from templated_mail.mail import BaseEmailMessage
 
+from notification.utils import notify
+
 from .models import Assessment, Enrollment, Result, ResultModificationLog
 
 logger = logging.getLogger(__name__)
+
+User = get_user_model()
 
 
 @receiver(post_save, sender=Result, weak=False)
@@ -79,7 +84,7 @@ def send_lecturer_email_for_result_modification(sender, **kwargs):
             "modified_at": instance.modified_at,
             "reason": instance.reason,
             "changes": changes,
-            "detail_url": f"http:///results/{assessment.id}/",
+            "detail_url": f"http://results/{assessment.id}/",
         }
 
         # Send email
@@ -93,3 +98,45 @@ def send_lecturer_email_for_result_modification(sender, **kwargs):
         logger.warning("BadHeaderError prevented email sending")
     except Exception as e:  # Catch all other errors
         logger.error(f"Email failed: {str(e)}", exc_info=True)
+
+
+@receiver(post_save, sender=Result, weak=False)
+def send_result_notification(sender, instance, created, **kwargs):
+    if not created and instance.status != "A":
+        department = instance.course.program.department
+        faculty = instance.course.program.department.faculty
+        lecturer = instance.course.lecturer
+        dro = User.objects.get(is_dro=True, profile__department=department)
+        fro = User.objects.get(
+            is_fro=True,
+            profile__department=department,
+            profile__department__faculty=faculty,
+        )
+
+        if lecturer == instance.updated_by:
+            status = "L_D"
+        else:
+            status = instance.status
+
+        if status == "L_D":
+            recipient = lecturer
+        if status == "D":
+            recipient = lecturer
+        if status == "P_D":
+            recipient = dro
+        if status == "P_F":
+            recipient = fro
+
+        VERB_MAP = {
+            "D": f"{instance.updated_by} returned results for {instance.course.name}",
+            "L_D": f"You have submitted results for {instance.course.name}",
+            "P_D": f"{instance.updated_by} submitted results for {instance.course.name} to be approved",
+            "P_F": f"{instance.updated_by} submitted results for {instance.course.name} to be approved",
+        }
+
+        notify(
+            recipient=recipient,
+            actor=instance.updated_by,
+            verb=VERB_MAP.get(status),
+            target_instance=instance,
+        )

@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     # 'audit',
     "core",
     "result_system.apps.ResultSystemConfig",
+    "notification",
 ]
 
 MIDDLEWARE = [
@@ -60,11 +61,11 @@ MIDDLEWARE = [
 
 INTERNAL_IPS = ["127.0.0.1"]
 
-#CORS_ALLOW_ALL_ORIGINS = True
+# CORS_ALLOW_ALL_ORIGINS = True
 CORS_ALLOWED_ORIGINS = [
-   "http://localhost:8080",
-   "http://localhost:3000",
-   "http://localhost:5173",
+    "http://localhost:8080",
+    "http://localhost:3000",
+    "http://localhost:5173",
 ]
 ROOT_URLCONF = "examination_management_system.urls"
 
