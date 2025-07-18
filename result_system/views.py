@@ -66,6 +66,7 @@ class ResultViewSet(ModelViewSet):
                 status=status.HTTP_403_FORBIDDEN,
             )
         result.status = "P_D"
+        result.updated_by = self.request.user
         result.submitted_at = timezone.now()
         result.save()
         return Response(
@@ -76,6 +77,10 @@ class ResultViewSet(ModelViewSet):
             },
             status=status.HTTP_200_OK,
         )
+
+    def perform_update(self, serializer):
+        serializer.save(updated_by=self.request.user)
+        return super().perform_update(serializer)
 
     def get_queryset(self):
         user = self.request.user
@@ -101,6 +106,9 @@ class ViewResultViewSet(
     serializer_class = ResultSerializer
     permission_classes = [ViewResultRoles]
 
+    def perform_update(self, serializer):
+        serializer.save(updated_by=self.request.user)
+
     def get_queryset(self):
         user = self.request.user
         dro = user.is_dro
@@ -109,12 +117,12 @@ class ViewResultViewSet(
         lecturer = user.is_lecturer
         if dro:
             return Result.objects.filter(
-                course__program__department=user.profiles.department,
+                course__program__department=user.profile.department,
                 status="P_D",
             )
         elif fro:
             return Result.objects.filter(
-                course__program__department__faculty=user.profiles.department.faculty,
+                course__program__department__faculty=user.profile.department.faculty,
                 status="P_F",
             )
         elif lecturer:
@@ -141,13 +149,13 @@ class AssessmentViewSet(
         if dro:
             return Assessment.objects.filter(
                 result__status="P_D",
-                result__course__program__department=user.profiles.department,
+                result__course__program__department=user.profile.department,
                 result_id=self.kwargs.get("result_pk"),
             )
         elif fro:
             return Assessment.objects.filter(
                 result__status="P_F",
-                result__course__program__department__faculty=user.profiles.department.faculty,
+                result__course__program__department__faculty=user.profile.department.faculty,
                 result_id=self.kwargs.get("result_pk"),
             )
         elif co:
