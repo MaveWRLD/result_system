@@ -4,24 +4,40 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-django-debug-toolbar = "*"
-mysqlclient = "*"
-djangorestframework = "*"
+# Core Django
 django = "*"
-drf-nested-routers = "*"
+djangorestframework = "*"
 django-filter = "*"
-djoser = "*"
 djangorestframework-simplejwt = "*"
-whitenoise = "*"
-gunicorn = "*"
-django-cors-headers = "*"
+djoser = "*"
 django-templated-mail = "*"
-drf-spectacular = "*"
+django-cors-headers = "*"
+
+# Database
+mysqlclient = "*"
 psycopg2-binary = "*"
 dj-database-url = "*"
+
+# API
+drf-nested-routers = "*"
+drf-spectacular = "*"
+
+# Deployment
+whitenoise = "*"
+gunicorn = "*"
+
+# Configuration
 python-decouple = "*"
 
 [dev-packages]
+# Debugging & Development
+django-debug-toolbar = "*"  # Only for local development
+pytest = "*"               # Testing (optional)
+pytest-django = "*"        # Django pytest integration (optional)
+factory-boy = "*"          # Test data generation (optional)
+ipdb = "*"                 # Debugging (optional)
+black = "*"                # Code formatting (optional)
+flake8 = "*"               # Linting (optional)
 
 [requires]
 python_version = "*"

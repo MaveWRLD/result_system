@@ -29,6 +29,7 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     path("_debug_/", include(debug_toolbar.urls)),
     path("result-system/", include("result_system.urls")),
+    path("notification/", include("notification.urls")),
     path("auth/", include("djoser.urls")),
     path("auth/", include("djoser.urls.jwt")),
     path("api/schema/", SpectacularAPIView.as_view(), name="schema"),
