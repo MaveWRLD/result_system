@@ -113,10 +113,10 @@ def send_result_notification(sender, instance, created, **kwargs):
             profile__department__faculty=faculty,
         )
 
-        if lecturer == instance.updated_by:
-            status = "L_D"
-        else:
-            status = instance.status
+        #if lecturer == instance.updated_by:
+        #    status = "L_D"
+        #else:
+        status = instance.status
 
         if status == "L_D":
             recipient = lecturer
