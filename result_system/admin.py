@@ -60,6 +60,10 @@ class ResultAdmin(admin.ModelAdmin):
     inlines = [AssessmentScoreInline]
 
 
-
+@admin.register(models.ResultModificationLog)
+class StudentAdmin(admin.ModelAdmin):
+    list_display = ['assessment', 'modified_by', 'old_data', 'new_data', 'reason', 'modified_at']
+    list_select_related = ['assessment', 'modified_by']
+    #search_fields = ['student_id', 'name']
 
 # Register your models here.
