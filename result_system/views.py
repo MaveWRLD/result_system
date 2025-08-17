@@ -340,7 +340,9 @@ class AssessmentViewSet(
         return Response(results, status=status.HTTP_200_OK)
 
 
-class CASlotMaxViewSet(ListModelMixin, RetrieveModelMixin, GenericViewSet):
+class CASlotMaxViewSet(
+    ListModelMixin, UpdateModelMixin, RetrieveModelMixin, GenericViewSet
+):
     serializer_class = CASlotMaxSerializer
     # permission_classes = [DjangoModelPermissions]
 
