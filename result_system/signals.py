@@ -8,7 +8,7 @@ from templated_mail.mail import BaseEmailMessage
 
 from notification.utils import notify
 
-from .models import Assessment, Enrollment, Result, ResultModificationLog
+from .models import Assessment, CASlotMax, Enrollment, Result, ResultModificationLog
 
 logger = logging.getLogger(__name__)
 
@@ -24,15 +24,16 @@ def create_assessment_for_students_in_result(sender, **kwargs):
         Assessment(result=instance, student=enrollment.student)
         for enrollment in enrollments
     ]
-    if kwargs["created"]:
-        Assessment.objects.bulk_create(assessment_create)
-
+    assessments = Assessment.objects.bulk_create(assessment_create)
+    CASlotMax.objects.bulk_create([
+        CASlotMax(assessment=assessment) for assessment in assessments
+    ])
 
 @receiver(post_save, sender=ResultModificationLog, weak=False)
 def send_lecturer_email_for_result_modification(sender, **kwargs):
     if not kwargs.get("created"):
         return  # Only send for new instances
-
+    
     instance = kwargs["instance"]
 
     try:
@@ -113,9 +114,9 @@ def send_result_notification(sender, instance, created, **kwargs):
             profile__department__faculty=faculty,
         )
 
-        #if lecturer == instance.updated_by:
+        # if lecturer == instance.updated_by:
         #    status = "L_D"
-        #else:
+        # else:
         status = instance.status
 
         if status == "L_D":

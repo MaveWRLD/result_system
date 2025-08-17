@@ -4,13 +4,15 @@ from djoser.serializers import UserCreateSerializer as BaseUserSerializer
 from djoser.serializers import UserSerializer
 from rest_framework import serializers
 
-from .models import (  # SubmittedResult,; SubmittedResultScore,
+from .models import ( 
     Assessment,
     Course,
     Enrollment,
     Result,
     ResultModificationLog,
+    CASlotMax,
     Student,
+
 )
 
 User = get_user_model()
@@ -91,6 +93,14 @@ class AssessmentSerializer(serializers.ModelSerializer):
     #                enrolled_student__course=result.course
     #            ).distinct()
 
+class CASlotMaxSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CASlotMax
+        fields = ["id", "assessment_id", "ca_slot1_max", "ca_slot2_max", "ca_slot3_max", "ca_slot4_max"]
+
+    #def create(self, validated_data):
+    #    assessment_id = self.context["assessment_id"]
+    #    return CASlotMax.objects.create(assessment_id=assessment_id, **validated_data)  
 
 class ResultModificationLogSerializer(serializers.ModelSerializer):
     modified_by = serializers.StringRelatedField()

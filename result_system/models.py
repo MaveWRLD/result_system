@@ -27,7 +27,11 @@ class Profile(models.Model):
         settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="profile"
     )
     department = models.ForeignKey(
-        Department, on_delete=models.CASCADE, null=True, blank=True, related_name="profiles"
+        Department,
+        on_delete=models.CASCADE,
+        null=True,
+        blank=True,
+        related_name="profiles",
     )
 
 
@@ -226,6 +230,31 @@ class Assessment(models.Model):
 
     def __str__(self):
         return f"{self.student.name} - {self.result.course.code}"
+
+
+class CASlotMax(models.Model):
+    assessment = models.OneToOneField(
+        Assessment, on_delete=models.CASCADE, related_name="ca_slot_max"
+    )
+    ca_slot1_max = models.PositiveIntegerField(
+        validators=[MinValueValidator(0), MaxValueValidator(20)],
+        default=10,
+    )
+    ca_slot2_max = models.PositiveIntegerField(
+        validators=[MinValueValidator(0), MaxValueValidator(20)],
+        default=10,
+    )
+    ca_slot3_max = models.PositiveIntegerField(
+        validators=[MinValueValidator(0), MaxValueValidator(20)],
+        default=10,
+    )
+    ca_slot4_max = models.PositiveIntegerField(
+        validators=[MinValueValidator(0), MaxValueValidator(20)],
+        default=10,
+    )
+    
+    def __str__(self):
+        return f"CA Slot Max for {self.assessment.result.course.code}"
 
 
 class ResultModificationLog(models.Model):

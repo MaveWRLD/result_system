@@ -14,6 +14,7 @@ from rest_framework.viewsets import GenericViewSet, ModelViewSet, ReadOnlyModelV
 
 from .models import (  # SubmittedResult,; SubmittedResultScore,
     Assessment,
+    CASlotMax,
     Course,
     Enrollment,
     Result,
@@ -27,6 +28,7 @@ from .permissions import (
 )
 from .serializers import (  # SubmitResultSerializer,; SubmittedResultScoreSerializer,; SubmittedResultSerializer,
     AssessmentSerializer,
+    CASlotMaxSerializer,
     CourseSerializer,
     ResultModificationLogSerializer,
     ResultSerializer,
@@ -336,6 +338,17 @@ class AssessmentViewSet(
                 ResultModificationLog.objects.bulk_create(logs)
 
         return Response(results, status=status.HTTP_200_OK)
+
+
+class CASlotMaxViewSet(ListModelMixin, RetrieveModelMixin, GenericViewSet):
+    serializer_class = CASlotMaxSerializer
+    # permission_classes = [DjangoModelPermissions]
+
+    def get_queryset(self):
+        return CASlotMax.objects.all().select_related("assessment__result__course")
+
+    # def get_serializer_context(self):
+    #    return {"assessment_id": self.kwargs.get("assessment_pk")}
 
 
 class ResultModificationLogViewSet(ListModelMixin, RetrieveModelMixin, GenericViewSet):
