@@ -128,8 +128,8 @@ class ViewResultViewSet(
                 status="P_F",
             )
         elif lecturer:
-            return Result.objects.filter(
-                course__lecturer=user.id,
+            return Result.objects.filter(course__lecturer=user.id).exclude(
+                status__in=("D")
             )
         elif co:
             return Result.objects.filter(status="A")

@@ -16,18 +16,19 @@ User = get_user_model()
 
 
 @receiver(post_save, sender=Result, weak=False)
-def create_assessment_for_students_in_result(sender, **kwargs):
+def create_assessment_for_students_in_result(sender, created, **kwargs):
     instance = kwargs["instance"]
-    course = instance.course
-    enrollments = Enrollment.objects.filter(course=course)
-    assessment_create = [
-        Assessment(result=instance, student=enrollment.student)
-        for enrollment in enrollments
-    ]
-    assessments = Assessment.objects.bulk_create(assessment_create)
-    CASlotMax.objects.bulk_create([
-        CASlotMax(assessment=assessment) for assessment in assessments
-    ])
+    if created:
+        course = instance.course
+        enrollments = Enrollment.objects.filter(course=course)
+        assessment_create = [
+            Assessment(result=instance, student=enrollment.student)
+            for enrollment in enrollments
+        ]
+        assessments = Assessment.objects.bulk_create(assessment_create)
+        CASlotMax.objects.bulk_create([
+            CASlotMax(assessment=assessment) for assessment in assessments
+        ])
 
 @receiver(post_save, sender=ResultModificationLog, weak=False)
 def send_lecturer_email_for_result_modification(sender, **kwargs):
