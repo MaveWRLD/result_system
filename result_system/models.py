@@ -100,6 +100,7 @@ class Result(models.Model):
         ("P_F", "Pending Faculty"),
         ("A", "Approved"),
         ("R", "Rejected"),
+        ("C", "Correction"),
     ]
     course = models.OneToOneField(
         Course, on_delete=models.CASCADE, related_name="results"

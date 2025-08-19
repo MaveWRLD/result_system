@@ -22,7 +22,7 @@ from .models import (  # SubmittedResult,; SubmittedResultScore,
 )
 from .permissions import (
     CanCreateResult,
-    IsResultAssessmentDraft,
+    CanEditResultAssessment,
     IsResultDraft,
     ViewResultRoles,
 )
@@ -42,6 +42,11 @@ class CourseViewSet(ReadOnlyModelViewSet):
     # permission_classes = [IsAdminOrReadOnly]
 
     def get_queryset(self):
+        user = self.request.user
+        if user.is_dro:
+            return Course.objects.filter(
+                lecturer__is_active=False, program__department=user.profile.department
+            ).order_by("id")
         return Course.objects.filter(lecturer_id=self.request.user.id).order_by("id")
 
     def get_serializer_context(self):
@@ -55,7 +60,23 @@ class ResultViewSet(ModelViewSet):
     @action(detail=True, methods=["put", "get"])
     def submit(self, request, course_pk=None, pk=None):
         result = self.get_object()
-        if result.course.lecturer.id != request.user.id:
+        user = self.request.user
+        if (
+            not result.course.lecturer.is_active and user.is_dro
+        ) or result.course.lecturer.id == request.user.id:
+            result.status = "P_D"
+            result.updated_by = self.request.user
+            result.submitted_at = timezone.now()
+            result.save()
+            return Response(
+                {
+                    "status": result.status,
+                    "submitted_at": result.submitted_at,
+                    "message": "Result submitted successfully for department for approval",
+                },
+                status=status.HTTP_200_OK,
+            )
+        elif result.course.lecturer.id != request.user.id:
             return Response(
                 {"detail": "You are not authorized to perform this action"},
                 status=status.HTTP_403_FORBIDDEN,
@@ -67,18 +88,6 @@ class ResultViewSet(ModelViewSet):
                 },
                 status=status.HTTP_403_FORBIDDEN,
             )
-        result.status = "P_D"
-        result.updated_by = self.request.user
-        result.submitted_at = timezone.now()
-        result.save()
-        return Response(
-            {
-                "status": result.status,
-                "submitted_at": result.submitted_at,
-                "message": "Result submitted successfully for department for approval",
-            },
-            status=status.HTTP_200_OK,
-        )
 
     def perform_update(self, serializer):
         serializer.save(updated_by=self.request.user)
@@ -87,6 +96,13 @@ class ResultViewSet(ModelViewSet):
     def get_queryset(self):
         user = self.request.user
 
+        if user.is_dro:
+            return Result.objects.select_related("course__lecturer").filter(
+                course__lecturer__is_active=False,
+                course__program__department=user.profile.department,
+                course_id=self.kwargs["course_pk"],
+                status="D",
+            )
         return Result.objects.select_related("course__lecturer").filter(
             course__lecturer=user.id, course_id=self.kwargs["course_pk"], status="D"
         )
@@ -117,10 +133,11 @@ class ViewResultViewSet(
         fro = user.is_fro
         co = user.is_co
         lecturer = user.is_lecturer
+
         if dro:
             return Result.objects.filter(
+                Q(course__lecturer__is_active=False) & Q(status="C") | Q(status="P_D"),
                 course__program__department=user.profile.department,
-                status="P_D",
             )
         elif fro:
             return Result.objects.filter(
@@ -139,7 +156,7 @@ class AssessmentViewSet(
     ListModelMixin, RetrieveModelMixin, UpdateModelMixin, GenericViewSet
 ):
     serializer_class = AssessmentSerializer
-    permission_classes = [IsResultAssessmentDraft]
+    permission_classes = [CanEditResultAssessment]
 
     def get_queryset(self):
         #        read_only_fields = ("id", "submitted_result_id", "student_id")
@@ -148,9 +165,13 @@ class AssessmentViewSet(
         fro = user.is_fro
         co = user.is_co
         lecturer = user.is_lecturer
+        course = Course.objects.get(results=self.kwargs.get("result_pk"))
+ 
         if dro:
             return Assessment.objects.filter(
-                result__status="P_D",
+                Q(result__course__lecturer__is_active=False) & Q(result__status="C")
+                | Q(result__status="P_D"),
+                # result__status="P_D",
                 result__course__program__department=user.profile.department,
                 result_id=self.kwargs.get("result_pk"),
             )

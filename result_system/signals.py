@@ -26,15 +26,16 @@ def create_assessment_for_students_in_result(sender, created, **kwargs):
             for enrollment in enrollments
         ]
         assessments = Assessment.objects.bulk_create(assessment_create)
-        CASlotMax.objects.bulk_create([
-            CASlotMax(assessment=assessment) for assessment in assessments
-        ])
+        CASlotMax.objects.bulk_create(
+            [CASlotMax(assessment=assessment) for assessment in assessments]
+        )
+
 
 @receiver(post_save, sender=ResultModificationLog, weak=False)
 def send_lecturer_email_for_result_modification(sender, **kwargs):
     if not kwargs.get("created"):
         return  # Only send for new instances
-    
+
     instance = kwargs["instance"]
 
     try:
@@ -128,12 +129,17 @@ def send_result_notification(sender, instance, created, **kwargs):
             recipient = dro
         if status == "P_F":
             recipient = fro
+        if not lecturer.is_active and status == "C":
+            recipient = dro
+        else:
+            recipient = lecturer
 
         VERB_MAP = {
             "D": f"{instance.updated_by} returned results for {instance.course.name}",
             "L_D": f"You have submitted results for {instance.course.name}",
             "P_D": f"{instance.updated_by} submitted results for {instance.course.name} to be approved",
             "P_F": f"{instance.updated_by} submitted results for {instance.course.name} to be approved",
+            "C": f"{instance.updated_by} submitted results for {instance.course.name} for corrections to be made",
         }
 
         notify(
