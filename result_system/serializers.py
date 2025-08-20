@@ -1,21 +1,88 @@
-from django.contrib.auth import get_user_model
+from django.contrib.auth import authenticate, get_user_model
 from django.db import transaction
-from djoser.serializers import UserCreateSerializer as BaseUserSerializer
-from djoser.serializers import UserSerializer
+from djoser.serializers import TokenCreateSerializer, UserSerializer
 from rest_framework import serializers
 
-from .models import ( 
+from .models import (
     Assessment,
+    CASlotMax,
     Course,
-    Enrollment,
     Result,
     ResultModificationLog,
-    CASlotMax,
-    Student,
-
+    UserMFA,
 )
 
 User = get_user_model()
+
+
+class MFATokenCreateSerializer(TokenCreateSerializer):
+    mfa_code = serializers.CharField(required=False, allow_blank=True)
+
+    def validate(self, attrs):
+        # Authenticate user first
+        username = attrs.get("username")
+        password = attrs.get("password")
+
+        if username and password:
+            user = authenticate(
+                request=self.context.get("request"),
+                username=username,
+                password=password,
+            )
+
+            if not user:
+                raise serializers.ValidationError(
+                    {"error": "Unable to log in with provided credentials."}
+                )
+
+            # Check MFA status
+            try:
+                mfa = UserMFA.objects.get(user=user)
+                if mfa.is_mfa_enabled:
+                    mfa_code = attrs.get("mfa_code")
+                    if not mfa_code:
+                        raise serializers.ValidationError(
+                            {"mfa_required": True, "message": "MFA code required"}
+                        )
+
+                    if not (
+                        mfa.verify_totp(mfa_code) or mfa.verify_backup_code(mfa_code)
+                    ):
+                        raise serializers.ValidationError({"error": "Invalid MFA code"})
+
+            except UserMFA.DoesNotExist:
+                # User doesn't have MFA setup yet
+                raise serializers.ValidationError(
+                    {
+                        "mfa_setup_required": True,
+                        "message": "MFA setup required before login",
+                    }
+                )
+
+            # If MFA is verified or not required, proceed
+            attrs["user"] = user
+            return attrs
+
+        raise serializers.ValidationError(
+            {"error": 'Must include "username" and "password".'}
+        )
+
+
+class MFAVerifySerializer(serializers.Serializer):
+    code = serializers.CharField()
+
+
+class BackupCodeSerializer(serializers.Serializer):
+    code = serializers.CharField()
+
+
+class MFAStatusSerializer(serializers.Serializer):
+    mfa_enabled = serializers.BooleanField()
+    has_backup_codes = serializers.BooleanField()
+
+
+class MFASetupSerializer(serializers.Serializer):
+    token = serializers.CharField()
 
 
 class CustomUserSerializer(UserSerializer):
@@ -93,14 +160,23 @@ class AssessmentSerializer(serializers.ModelSerializer):
     #                enrolled_student__course=result.course
     #            ).distinct()
 
+
 class CASlotMaxSerializer(serializers.ModelSerializer):
     class Meta:
         model = CASlotMax
-        fields = ["id", "assessment_id", "ca_slot1_max", "ca_slot2_max", "ca_slot3_max", "ca_slot4_max"]
+        fields = [
+            "id",
+            "assessment_id",
+            "ca_slot1_max",
+            "ca_slot2_max",
+            "ca_slot3_max",
+            "ca_slot4_max",
+        ]
 
-    #def create(self, validated_data):
+    # def create(self, validated_data):
     #    assessment_id = self.context["assessment_id"]
-    #    return CASlotMax.objects.create(assessment_id=assessment_id, **validated_data)  
+    #    return CASlotMax.objects.create(assessment_id=assessment_id, **validated_data)
+
 
 class ResultModificationLogSerializer(serializers.ModelSerializer):
     modified_by = serializers.StringRelatedField()

@@ -1,10 +1,56 @@
+import json
+import secrets
 from decimal import Decimal
 
+import pyotp
 from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 from django.forms import ValidationError
+
+
+class UserMFA(models.Model):
+    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    mfa_secret = models.CharField(max_length=32, blank=True)
+    is_mfa_enabled = models.BooleanField(default=False)
+    backup_codes = models.TextField(blank=True)  # Store as plain JSON
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def generate_secret(self):
+        self.mfa_secret = pyotp.random_base32()
+        return self.mfa_secret
+
+    def generate_backup_codes(self, count=10):
+        codes = [str(secrets.randbelow(1000000000)).zfill(10) for _ in range(count)]
+        self.backup_codes = json.dumps(codes)
+        return codes
+
+    def verify_totp(self, code):
+        if not self.mfa_secret:
+            return False
+        totp = pyotp.TOTP(self.mfa_secret)
+        return totp.verify(code, valid_window=1)
+
+    def verify_backup_code(self, code):
+        try:
+            codes = json.loads(self.backup_codes or "[]")
+            if code in codes:
+                codes.remove(code)
+                self.backup_codes = json.dumps(codes)
+                self.save()
+                return True
+        except (ValueError, json.JSONDecodeError):
+            pass
+        return False
+
+    def has_valid_backup_codes(self):
+        try:
+            codes = json.loads(self.backup_codes or "[]")
+            return len(codes) > 0
+        except (ValueError, json.JSONDecodeError):
+            return False
 
 
 class Faculty(models.Model):
@@ -253,7 +299,7 @@ class CASlotMax(models.Model):
         validators=[MinValueValidator(0), MaxValueValidator(20)],
         default=10,
     )
-    
+
     def __str__(self):
         return f"CA Slot Max for {self.assessment.result.course.code}"
 

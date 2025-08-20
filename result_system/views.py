@@ -1,14 +1,19 @@
+import base64
 import json
 from decimal import Decimal
+from io import BytesIO
 
-from django.contrib.auth import get_user_model
+import pyotp
+import qrcode
+from django.contrib.auth import authenticate, get_user_model
 from django.db import transaction
 from django.db.models import Prefetch, Q
 from django.utils import timezone
-from rest_framework import status
+from djoser.views import TokenCreateView
+from rest_framework import mixins, status
 from rest_framework.decorators import action
 from rest_framework.mixins import ListModelMixin, RetrieveModelMixin, UpdateModelMixin
-from rest_framework.permissions import DjangoModelPermissions
+from rest_framework.permissions import DjangoModelPermissions, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.viewsets import GenericViewSet, ModelViewSet, ReadOnlyModelViewSet
 
@@ -19,6 +24,7 @@ from .models import (  # SubmittedResult,; SubmittedResultScore,
     Enrollment,
     Result,
     ResultModificationLog,
+    UserMFA,
 )
 from .permissions import (
     CanCreateResult,
@@ -28,13 +34,205 @@ from .permissions import (
 )
 from .serializers import (  # SubmitResultSerializer,; SubmittedResultScoreSerializer,; SubmittedResultSerializer,
     AssessmentSerializer,
+    BackupCodeSerializer,
     CASlotMaxSerializer,
     CourseSerializer,
+    MFASetupSerializer,
+    MFAStatusSerializer,
+    MFATokenCreateSerializer,
+    MFAVerifySerializer,
     ResultModificationLogSerializer,
     ResultSerializer,
 )
 
 User = get_user_model()
+
+# views.py (additional view for token handling)
+
+
+class MFATokenCreateView(TokenCreateView):
+    serializer_class = MFATokenCreateSerializer
+
+    def _action(self, serializer):
+        user = serializer.user
+
+        # Check if user needs MFA setup
+        from .models import UserMFA
+
+        try:
+            mfa = UserMFA.objects.get(user=user)
+            if not mfa.is_mfa_enabled:
+                # User needs to setup MFA
+                return Response(
+                    {
+                        "mfa_setup_required": True,
+                        "message": "MFA setup required before login",
+                    },
+                    status=status.HTTP_200_OK,
+                )
+
+        except UserMFA.DoesNotExist:
+            # Create MFA record for new user
+            mfa = UserMFA.objects.create(user=user)
+            mfa.generate_secret()
+            mfa.save()
+            return Response(
+                {
+                    "mfa_setup_required": True,
+                    "message": "MFA setup required before login",
+                },
+                status=status.HTTP_200_OK,
+            )
+
+        # If we get here, MFA was verified in the serializer
+        return super()._action(serializer)
+
+
+class MFAViewSet(GenericViewSet):
+    """
+    MFA ViewSet for handling 2FA operations
+    """
+
+    permission_classes = [IsAuthenticated]
+    queryset = UserMFA.objects.all()
+    serializer_class = MFASetupSerializer
+
+    def get_queryset(self):
+        return self.queryset.filter(user=self.request.user)
+
+    def get_object(self):
+        try:
+            return self.get_queryset().get()
+        except UserMFA.DoesNotExist:
+            # Create MFA record if it doesn't exist
+            return UserMFA.objects.create(user=self.request.user)
+
+    @action(detail=False, methods=["post"])
+    def setup(self, request):
+        """
+        Initialize MFA setup and generate QR code
+        """
+        mfa = self.get_object()
+
+        # Generate secret if not already exists
+        if not mfa.mfa_secret:
+            mfa.generate_secret()
+            mfa.save()
+
+        # Generate provisioning URI for QR code
+        provisioning_uri = pyotp.totp.TOTP(mfa.mfa_secret).provisioning_uri(
+            name=request.user.email, issuer_name="Your App Name"
+        )
+
+        # Generate QR code
+        qr = qrcode.make(provisioning_uri)
+        buffer = BytesIO()
+        qr.save(buffer, format="PNG")
+        qr_base64 = base64.b64encode(buffer.getvalue()).decode()
+
+        return Response(
+            {
+                "provisioning_uri": provisioning_uri,
+                "qr_code": f"data:image/png;base64,{qr_base64}",
+            },
+            status=status.HTTP_200_OK,
+        )
+
+    @action(detail=False, methods=["post"])
+    def verify_setup(self, request):
+        """
+        Verify MFA setup with a code from authenticator app
+        """
+        serializer = MFAVerifySerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+
+        code = serializer.validated_data["code"]
+        mfa = self.get_object()
+
+        if mfa.verify_totp(code):
+            mfa.is_mfa_enabled = True
+            backup_codes = mfa.generate_backup_codes()
+            mfa.save()
+
+            return Response(
+                {
+                    "message": "MFA setup successful",
+                    "backup_codes": backup_codes,
+                    "mfa_enabled": True,
+                },
+                status=status.HTTP_200_OK,
+            )
+        else:
+            return Response(
+                {"error": "Invalid verification code"},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+    @action(detail=False, methods=["get"])
+    def status(self, request):
+        """
+        Get MFA status for current user
+        """
+        try:
+            mfa = self.get_object()
+            serializer = MFAStatusSerializer(
+                {
+                    "mfa_enabled": mfa.is_mfa_enabled,
+                    "has_backup_codes": mfa.has_valid_backup_codes(),
+                }
+            )
+            return Response(serializer.data)
+        except UserMFA.DoesNotExist:
+            return Response({"mfa_enabled": False, "has_backup_codes": False})
+
+    @action(detail=False, methods=["post"])
+    def generate_backup_codes(self, request):
+        """
+        Generate new backup codes
+        """
+        mfa = self.get_object()
+
+        if not mfa.is_mfa_enabled:
+            return Response(
+                {"error": "MFA is not enabled"}, status=status.HTTP_400_BAD_REQUEST
+            )
+
+        backup_codes = mfa.generate_backup_codes()
+        mfa.save()
+
+        return Response({"backup_codes": backup_codes}, status=status.HTTP_200_OK)
+
+    @action(detail=False, methods=["post"])
+    def disable(self, request):
+        """
+        Disable MFA for current user (use with caution)
+        """
+        mfa = self.get_object()
+
+        if not mfa.is_mfa_enabled:
+            return Response(
+                {"error": "MFA is not enabled"}, status=status.HTTP_400_BAD_REQUEST
+            )
+
+        # Verify with a code before disabling
+        serializer = MFAVerifySerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+
+        code = serializer.validated_data["code"]
+
+        if mfa.verify_totp(code) or mfa.verify_backup_code(code):
+            mfa.is_mfa_enabled = False
+            mfa.backup_codes = ""  # Clear backup codes
+            mfa.save()
+
+            return Response(
+                {"message": "MFA disabled successfully"}, status=status.HTTP_200_OK
+            )
+        else:
+            return Response(
+                {"error": "Invalid verification code"},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
 
 
 class CourseViewSet(ReadOnlyModelViewSet):
