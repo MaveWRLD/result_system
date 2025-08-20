@@ -401,13 +401,19 @@ class AssessmentViewSet(
             return Assessment.objects.filter(
                 result__status="A", result_id=self.kwargs.get("result_pk")
             )
-        elif lecturer and route_name == "result-assessment-list":
+        elif lecturer and route_name in [
+            "result-assessment-list",
+            "result-assessment-detail",
+        ]:
             return Assessment.objects.filter(
                 result__status="D",
                 result__course__lecturer=user.id,
                 result_id=self.kwargs.get("result_pk"),
             )
-        elif lecturer and route_name == "submitted-result-score-list":
+        elif lecturer and route_name in [
+            "submitted-result-score-list",
+            "submitted-result-score-detail",
+        ]:
             return Assessment.objects.filter(
                 result__course__lecturer=user.id, result_id=self.kwargs.get("result_pk")
             ).exclude(result__status="D")
