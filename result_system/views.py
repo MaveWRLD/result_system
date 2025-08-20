@@ -97,13 +97,13 @@ class ResultViewSet(ModelViewSet):
         user = self.request.user
 
         if user.is_dro:
-            return Result.objects.select_related("course__lecturer").filter(
+            return Result.objects.select_related("course__program__department").filter(
                 course__lecturer__is_active=False,
                 course__program__department=user.profile.department,
                 course_id=self.kwargs["course_pk"],
                 status="D",
             )
-        return Result.objects.select_related("course__lecturer").filter(
+        return Result.objects.select_related("course").filter(
             course__lecturer=user.id, course_id=self.kwargs["course_pk"], status="D"
         )
 
@@ -136,9 +136,9 @@ class ViewResultViewSet(
 
         if dro:
             return Result.objects.filter(
-                Q(course__lecturer__is_active=False) & Q(status="C") | Q(status="P_D"),
+                Q(course__lecturer__is_active=False) | Q(status="P_D"),
                 course__program__department=user.profile.department,
-            )
+            ).exclude(status="D")
         elif fro:
             return Result.objects.filter(
                 course__program__department__faculty=user.profile.department.faculty,
@@ -166,12 +166,30 @@ class AssessmentViewSet(
         co = user.is_co
         lecturer = user.is_lecturer
         course = Course.objects.get(results=self.kwargs.get("result_pk"))
- 
-        if dro:
+
+        route_name = self.request.resolver_match.url_name
+        print(course.results.status)
+        print(route_name)
+
+        if (
+            dro
+            and course.results.status == "D"
+            and route_name in ["result-assessment-list", "result-assessment-detail"]
+        ):
             return Assessment.objects.filter(
-                Q(result__course__lecturer__is_active=False) & Q(result__status="C")
+                Q(result__course__lecturer__is_active=False) & Q(result__status="D")
                 | Q(result__status="P_D"),
-                # result__status="P_D",
+                result__course__program__department=user.profile.department,
+                result_id=self.kwargs.get("result_pk"),
+            )
+        elif (
+            dro
+            and course.results.status != "D"
+            and route_name
+            in ["submitted-result-score-list", "submitted-result-score-detail"]
+        ):
+            return Assessment.objects.filter(
+                Q(result__course__lecturer__is_active=False) | Q(result__status="P_D"),
                 result__course__program__department=user.profile.department,
                 result_id=self.kwargs.get("result_pk"),
             )
@@ -185,10 +203,16 @@ class AssessmentViewSet(
             return Assessment.objects.filter(
                 result__status="A", result_id=self.kwargs.get("result_pk")
             )
-        elif lecturer:
+        elif lecturer and route_name == "result-assessment-list":
+            return Assessment.objects.filter(
+                result__status="D",
+                result__course__lecturer=user.id,
+                result_id=self.kwargs.get("result_pk"),
+            )
+        elif lecturer and route_name == "submitted-result-score-list":
             return Assessment.objects.filter(
                 result__course__lecturer=user.id, result_id=self.kwargs.get("result_pk")
-            )
+            ).exclude(result__status="D")
 
     def get_serializer_context(self):
         context = super().get_serializer_context()
