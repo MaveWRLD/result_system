@@ -20,6 +20,7 @@ whitenoise = "*"
 gunicorn = "*"
 python-decouple = "*"
 pyotp = "*"
+qrcode = "*"
 
 [dev-packages]
 django-debug-toolbar = "*"  # Only for local development
