@@ -21,6 +21,7 @@ gunicorn = "*"
 python-decouple = "*"
 pyotp = "*"
 qrcode = "*"
+pillow = "*"
 
 [dev-packages]
 django-debug-toolbar = "*"  # Only for local development
