@@ -3,13 +3,13 @@ from .common import *
 SECRET_KEY = config("SECRET_KEY")
 DEBUG = config("DEBUG", default=False, cast=bool)
 DATABASES = {
-   "default": {
-       "ENGINE": "django.db.backends.postgresql",
-       "NAME": config("DB_NAME"),
-       "HOST": config("DB_HOST"),
-       "USER": config("DB_USER"),
-       "PASSWORD": config("DB_PASSWORD"),
-   }
+    "default": {
+        "ENGINE": "django.db.backends.postgresql",
+        "NAME": config("DB_NAME"),
+        "HOST": config("DB_HOST"),
+        "USER": config("DB_USER"),
+        "PASSWORD": config("DB_PASSWORD"),
+    }
 }
 
 

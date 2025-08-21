@@ -430,6 +430,8 @@ class ResultModificationLogViewSet(ListModelMixin, RetrieveModelMixin, GenericVi
 
 
 class InitialLoginView(APIView):
+    permission_classes = [AllowAny]
+
     def post(self, request):
         username = request.data.get("username")
         password = request.data.get("password")
