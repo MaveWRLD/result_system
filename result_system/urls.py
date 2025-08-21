@@ -5,7 +5,6 @@ from . import views
 
 # Main router for the result system
 router = DefaultRouter()
-router.register(r"auth/mfa", views.MFAViewSet, basename="mfa")
 router.register("courses", views.CourseViewSet, basename="course")
 router.register(
     "submitted-results", views.ViewResultViewSet, basename="submitted-result"
@@ -24,13 +23,13 @@ submitted_result = NestedDefaultRouter(router, "submitted-results", lookup="resu
 submitted_result.register(
     "scores", views.AssessmentViewSet, basename="submitted-result-score"
 )
-
-urlpatterns = [
-    # Override Djoser's token create endpoint
-    path("auth/token/login/", views.MFATokenCreateView.as_view(), name="login"),
-    # Include MFA ViewSet routes
-    path("", include(router.urls)),
-    # Include other Djoser URLs
-    path("auth/", include("djoser.urls")),
-    path("auth/", include("djoser.urls.jwt")),
-] + (router.urls + course_router.urls + result_router.urls + submitted_result.urls)
+urlpatterns = (
+    [
+        path('auth/login/', views.InitialLoginView.as_view(), name='initial-login'),
+        path('auth/2fa-verify/', views.TwoFAVerifyView.as_view(), name='2fa-verify'),
+]
+    + router.urls
+    + course_router.urls
+    + result_router.urls
+    + submitted_result.urls
+)

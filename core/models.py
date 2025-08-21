@@ -8,6 +8,8 @@ class User(AbstractUser):
     is_dro = models.BooleanField(default=False)
     is_fro = models.BooleanField(default=False)
     is_co = models.BooleanField(default=False)
+    otp_secret = models.CharField(max_length=32, blank=True, null=True)
+    is_2fa_enabled = models.BooleanField(default=False)
 
 
     
