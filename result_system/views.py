@@ -427,8 +427,6 @@ class ResultModificationLogViewSet(ListModelMixin, RetrieveModelMixin, GenericVi
     # ]
 
 
-
-
 class InitialLoginView(APIView):
     permission_classes = [AllowAny]
 
@@ -471,6 +469,8 @@ class InitialLoginView(APIView):
 
 
 class TwoFAVerifyView(APIView):
+    permission_classes = [AllowAny]
+
     def post(self, request):
         user_id = request.data.get("user_id")
         otp_code = request.data.get("otp_code")

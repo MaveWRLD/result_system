@@ -78,9 +78,9 @@ class ViewResultRoles(permissions.BasePermission):
 
         # Define allowed transitions for each role
         allowed_transitions = {
-            "dro": {"P_D": ["P_F", "D"]},
+            "dro": {"P_D": ["P_F", "D"], "C": ["P_D"]},
             "fro": {"P_F": ["A", "P_D"]},
-            "lecturer":{"C":["P_D"]},
+            "lecturer": {"C": ["P_D"]},
             "co": {"A": ["C"]},  # CO can't make any status changes
         }
 
