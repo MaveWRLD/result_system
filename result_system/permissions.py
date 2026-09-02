@@ -39,7 +39,7 @@ class CanCreateResult(permissions.BasePermission):
         return request.user.is_authenticated
 
 
-class IsResultAssessmentDraft(permissions.BasePermission):
+class CanEditResultAssessment(permissions.BasePermission):
     message = "Result can not be changed when submitted. Request to DRO for changes"
 
     def has_object_permission(self, request, view, obj):
@@ -47,9 +47,9 @@ class IsResultAssessmentDraft(permissions.BasePermission):
 
         if request.method in permissions.SAFE_METHODS:
             return True
-        if user.is_co:
-            return True
-        if obj.result.status == "D":
+        # if (user.is_dro or user.is_lecturer) and :
+        #    return True
+        if obj.result.status == "D" or obj.result.status == "C":
             return True
 
 
@@ -78,9 +78,10 @@ class ViewResultRoles(permissions.BasePermission):
 
         # Define allowed transitions for each role
         allowed_transitions = {
-            "dro": {"P_D": ["P_F", "D"]},
+            "dro": {"P_D": ["P_F", "D"], "C": ["P_D"]},
             "fro": {"P_F": ["A", "P_D"]},
-            "co": {},  # CO can't make any status changes
+            "lecturer": {"C": ["P_D"]},
+            "co": {"A": ["C"]},  # CO can't make any status changes
         }
 
         # Check if user has permission for this transition

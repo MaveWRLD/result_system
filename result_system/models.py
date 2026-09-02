@@ -1,5 +1,8 @@
+import json
+import secrets
 from decimal import Decimal
 
+import pyotp
 from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.core.validators import MaxValueValidator, MinValueValidator
@@ -27,7 +30,11 @@ class Profile(models.Model):
         settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="profile"
     )
     department = models.ForeignKey(
-        Department, on_delete=models.CASCADE, null=True, blank=True, related_name="profiles"
+        Department,
+        on_delete=models.CASCADE,
+        null=True,
+        blank=True,
+        related_name="profiles",
     )
 
 
@@ -96,6 +103,7 @@ class Result(models.Model):
         ("P_F", "Pending Faculty"),
         ("A", "Approved"),
         ("R", "Rejected"),
+        ("C", "Correction"),
     ]
     course = models.OneToOneField(
         Course, on_delete=models.CASCADE, related_name="results"
@@ -226,6 +234,31 @@ class Assessment(models.Model):
 
     def __str__(self):
         return f"{self.student.name} - {self.result.course.code}"
+
+
+class CASlotMax(models.Model):
+    assessment = models.OneToOneField(
+        Assessment, on_delete=models.CASCADE, related_name="ca_slot_max"
+    )
+    ca_slot1_max = models.PositiveIntegerField(
+        validators=[MinValueValidator(0), MaxValueValidator(20)],
+        default=10,
+    )
+    ca_slot2_max = models.PositiveIntegerField(
+        validators=[MinValueValidator(0), MaxValueValidator(20)],
+        default=10,
+    )
+    ca_slot3_max = models.PositiveIntegerField(
+        validators=[MinValueValidator(0), MaxValueValidator(20)],
+        default=10,
+    )
+    ca_slot4_max = models.PositiveIntegerField(
+        validators=[MinValueValidator(0), MaxValueValidator(20)],
+        default=10,
+    )
+
+    def __str__(self):
+        return f"CA Slot Max for {self.assessment.result.course.code}"
 
 
 class ResultModificationLog(models.Model):

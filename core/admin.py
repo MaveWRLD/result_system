@@ -6,7 +6,8 @@ from .models import User
 class UserAdmin(BaseUserAdmin):
     list_display = ['first_name', 'last_name', 'is_lecturer', 'is_dro', 'is_fro', 'is_co','username']
     fieldsets = BaseUserAdmin.fieldsets + (
-        (("UserRoles info"), {"fields": ('is_lecturer', 'is_dro', 'is_fro', 'is_co')}),        
+        (("UserRoles info"), {"fields": ('is_lecturer', 'is_dro', 'is_fro', 'is_co')}), 
+        (("2FA Settings"), {"fields": ('otp_secret', 'is_2fa_enabled')}),       
     )
     add_fieldsets = (
         (None, {

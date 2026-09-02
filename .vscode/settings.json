@@ -2,6 +2,7 @@
     "cSpell.words": [
         "authtoken",
         "corsheaders",
-        "djoser"
+        "djoser",
+        "totp"
     ]
 }

@@ -1,19 +1,30 @@
+import base64
+import io
 import json
 from decimal import Decimal
 
-from django.contrib.auth import get_user_model
+import pyotp
+import qrcode
+from django.contrib.auth import authenticate, get_user_model
 from django.db import transaction
 from django.db.models import Prefetch, Q
+from django.urls import path
 from django.utils import timezone
-from rest_framework import status
+from djoser.views import TokenCreateView
+from rest_framework import mixins, status
 from rest_framework.decorators import action
 from rest_framework.mixins import ListModelMixin, RetrieveModelMixin, UpdateModelMixin
-from rest_framework.permissions import DjangoModelPermissions
+from rest_framework.permissions import AllowAny, DjangoModelPermissions, IsAuthenticated
 from rest_framework.response import Response
+from rest_framework.views import APIView
 from rest_framework.viewsets import GenericViewSet, ModelViewSet, ReadOnlyModelViewSet
+from rest_framework_simplejwt.tokens import RefreshToken
+
+from core.models import User
 
 from .models import (  # SubmittedResult,; SubmittedResultScore,
     Assessment,
+    CASlotMax,
     Course,
     Enrollment,
     Result,
@@ -21,12 +32,13 @@ from .models import (  # SubmittedResult,; SubmittedResultScore,
 )
 from .permissions import (
     CanCreateResult,
-    IsResultAssessmentDraft,
+    CanEditResultAssessment,
     IsResultDraft,
     ViewResultRoles,
 )
 from .serializers import (  # SubmitResultSerializer,; SubmittedResultScoreSerializer,; SubmittedResultSerializer,
     AssessmentSerializer,
+    CASlotMaxSerializer,
     CourseSerializer,
     ResultModificationLogSerializer,
     ResultSerializer,
@@ -40,6 +52,11 @@ class CourseViewSet(ReadOnlyModelViewSet):
     # permission_classes = [IsAdminOrReadOnly]
 
     def get_queryset(self):
+        user = self.request.user
+        if user.is_dro:
+            return Course.objects.filter(
+                lecturer__is_active=False, program__department=user.profile.department
+            ).order_by("id")
         return Course.objects.filter(lecturer_id=self.request.user.id).order_by("id")
 
     def get_serializer_context(self):
@@ -53,7 +70,23 @@ class ResultViewSet(ModelViewSet):
     @action(detail=True, methods=["put", "get"])
     def submit(self, request, course_pk=None, pk=None):
         result = self.get_object()
-        if result.course.lecturer.id != request.user.id:
+        user = self.request.user
+        if (
+            not result.course.lecturer.is_active and user.is_dro
+        ) or result.course.lecturer.id == request.user.id:
+            result.status = "P_D"
+            result.updated_by = self.request.user
+            result.submitted_at = timezone.now()
+            result.save()
+            return Response(
+                {
+                    "status": result.status,
+                    "submitted_at": result.submitted_at,
+                    "message": "Result submitted successfully for department for approval",
+                },
+                status=status.HTTP_200_OK,
+            )
+        elif result.course.lecturer.id != request.user.id:
             return Response(
                 {"detail": "You are not authorized to perform this action"},
                 status=status.HTTP_403_FORBIDDEN,
@@ -65,18 +98,6 @@ class ResultViewSet(ModelViewSet):
                 },
                 status=status.HTTP_403_FORBIDDEN,
             )
-        result.status = "P_D"
-        result.updated_by = self.request.user
-        result.submitted_at = timezone.now()
-        result.save()
-        return Response(
-            {
-                "status": result.status,
-                "submitted_at": result.submitted_at,
-                "message": "Result submitted successfully for department for approval",
-            },
-            status=status.HTTP_200_OK,
-        )
 
     def perform_update(self, serializer):
         serializer.save(updated_by=self.request.user)
@@ -85,7 +106,14 @@ class ResultViewSet(ModelViewSet):
     def get_queryset(self):
         user = self.request.user
 
-        return Result.objects.select_related("course__lecturer").filter(
+        if user.is_dro:
+            return Result.objects.select_related("course__program__department").filter(
+                course__lecturer__is_active=False,
+                course__program__department=user.profile.department,
+                course_id=self.kwargs["course_pk"],
+                status="D",
+            )
+        return Result.objects.select_related("course").filter(
             course__lecturer=user.id, course_id=self.kwargs["course_pk"], status="D"
         )
 
@@ -115,19 +143,20 @@ class ViewResultViewSet(
         fro = user.is_fro
         co = user.is_co
         lecturer = user.is_lecturer
+
         if dro:
             return Result.objects.filter(
+                Q(course__lecturer__is_active=False) | Q(status="P_D"),
                 course__program__department=user.profile.department,
-                status="P_D",
-            )
+            ).exclude(status="D")
         elif fro:
             return Result.objects.filter(
                 course__program__department__faculty=user.profile.department.faculty,
                 status="P_F",
             )
         elif lecturer:
-            return Result.objects.filter(
-                course__lecturer=user.id,
+            return Result.objects.filter(course__lecturer=user.id).exclude(
+                status__in=("D")
             )
         elif co:
             return Result.objects.filter(status="A")
@@ -137,7 +166,7 @@ class AssessmentViewSet(
     ListModelMixin, RetrieveModelMixin, UpdateModelMixin, GenericViewSet
 ):
     serializer_class = AssessmentSerializer
-    permission_classes = [IsResultAssessmentDraft]
+    permission_classes = [CanEditResultAssessment]
 
     def get_queryset(self):
         #        read_only_fields = ("id", "submitted_result_id", "student_id")
@@ -146,9 +175,31 @@ class AssessmentViewSet(
         fro = user.is_fro
         co = user.is_co
         lecturer = user.is_lecturer
-        if dro:
+        course = Course.objects.get(results=self.kwargs.get("result_pk"))
+
+        route_name = self.request.resolver_match.url_name
+        print(course.results.status)
+        print(route_name)
+
+        if (
+            dro
+            and course.results.status == "D"
+            and route_name in ["result-assessment-list", "result-assessment-detail"]
+        ):
             return Assessment.objects.filter(
-                result__status="P_D",
+                Q(result__course__lecturer__is_active=False) & Q(result__status="D")
+                | Q(result__status="P_D"),
+                result__course__program__department=user.profile.department,
+                result_id=self.kwargs.get("result_pk"),
+            )
+        elif (
+            dro
+            and course.results.status != "D"
+            and route_name
+            in ["submitted-result-score-list", "submitted-result-score-detail"]
+        ):
+            return Assessment.objects.filter(
+                Q(result__course__lecturer__is_active=False) | Q(result__status="P_D"),
                 result__course__program__department=user.profile.department,
                 result_id=self.kwargs.get("result_pk"),
             )
@@ -162,10 +213,22 @@ class AssessmentViewSet(
             return Assessment.objects.filter(
                 result__status="A", result_id=self.kwargs.get("result_pk")
             )
-        elif lecturer:
+        elif lecturer and route_name in [
+            "result-assessment-list",
+            "result-assessment-detail",
+        ]:
+            return Assessment.objects.filter(
+                result__status="D",
+                result__course__lecturer=user.id,
+                result_id=self.kwargs.get("result_pk"),
+            )
+        elif lecturer and route_name in [
+            "submitted-result-score-list",
+            "submitted-result-score-detail",
+        ]:
             return Assessment.objects.filter(
                 result__course__lecturer=user.id, result_id=self.kwargs.get("result_pk")
-            )
+            ).exclude(result__status="D")
 
     def get_serializer_context(self):
         context = super().get_serializer_context()
@@ -338,6 +401,18 @@ class AssessmentViewSet(
         return Response(results, status=status.HTTP_200_OK)
 
 
+class CASlotMaxViewSet(
+    ListModelMixin, UpdateModelMixin, RetrieveModelMixin, GenericViewSet
+):
+    serializer_class = CASlotMaxSerializer
+
+    def get_queryset(self):
+        return CASlotMax.objects.all().select_related("assessment__result__course")
+
+    # def get_serializer_context(self):
+    #    return {"assessment_id": self.kwargs.get("assessment_pk")}
+
+
 class ResultModificationLogViewSet(ListModelMixin, RetrieveModelMixin, GenericViewSet):
     serializer_class = ResultModificationLogSerializer
     queryset = ResultModificationLog.objects.all().select_related(
@@ -352,4 +427,70 @@ class ResultModificationLogViewSet(ListModelMixin, RetrieveModelMixin, GenericVi
     # ]
 
 
-# Create your views here.
+class InitialLoginView(APIView):
+    permission_classes = [AllowAny]
+
+    def post(self, request):
+        username = request.data.get("username")
+        password = request.data.get("password")
+        user = authenticate(username=username, password=password)
+        if user is None:
+            return Response(
+                {"detail": "Invalid credentials."}, status=status.HTTP_401_UNAUTHORIZED
+            )
+
+        if not user.is_2fa_enabled or not user.otp_secret:
+            # Setup 2FA for first-time users
+            otp_secret = pyotp.random_base32()
+            user.otp_secret = otp_secret
+            user.is_2fa_enabled = True
+            user.save()
+            totp = pyotp.TOTP(otp_secret)
+            uri = totp.provisioning_uri(name=user.username, issuer_name="ResultSystem")
+            qr = qrcode.make(uri)
+            buf = io.BytesIO()
+            qr.save(buf, format="PNG")
+            qr_code_b64 = base64.b64encode(buf.getvalue()).decode("utf-8")
+            return Response(
+                {
+                    "detail": "2FA setup required. Scan QR code with your authenticator app.",
+                    "otp_secret": otp_secret,
+                    "qr_code": f"data:image/png;base64,{qr_code_b64}",
+                    "user_id": user.id,
+                },
+                status=status.HTTP_202_ACCEPTED,
+            )
+        else:
+            # 2FA required
+            return Response(
+                {"detail": "2FA code required.", "user_id": user.id},
+                status=status.HTTP_202_ACCEPTED,
+            )
+
+
+class TwoFAVerifyView(APIView):
+    permission_classes = [AllowAny]
+
+    def post(self, request):
+        user_id = request.data.get("user_id")
+        otp_code = request.data.get("otp_code")
+        try:
+            user = User.objects.get(id=user_id)
+        except User.DoesNotExist:
+            return Response(
+                {"detail": "User not found."}, status=status.HTTP_404_NOT_FOUND
+            )
+
+        totp = pyotp.TOTP(user.otp_secret)
+        if not totp.verify(otp_code):
+            return Response(
+                {"detail": "Invalid 2FA code."}, status=status.HTTP_401_UNAUTHORIZED
+            )
+
+        refresh = RefreshToken.for_user(user)
+        return Response(
+            {
+                "refresh": str(refresh),
+                "access": str(refresh.access_token),
+            }
+        )
