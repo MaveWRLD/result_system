@@ -8,9 +8,9 @@ import qrcode
 from django.contrib.auth import authenticate, get_user_model
 from django.db import transaction
 from django.db.models import Prefetch, Q
+from django.core.signing import BadSignature, SignatureExpired, TimestampSigner
 from django.urls import path
 from django.utils import timezone
-from djoser.views import TokenCreateView
 from rest_framework import mixins, status
 from rest_framework.decorators import action
 from rest_framework.mixins import ListModelMixin, RetrieveModelMixin, UpdateModelMixin
@@ -178,8 +178,6 @@ class AssessmentViewSet(
         course = Course.objects.get(results=self.kwargs.get("result_pk"))
 
         route_name = self.request.resolver_match.url_name
-        print(course.results.status)
-        print(route_name)
 
         if (
             dro
@@ -427,6 +425,9 @@ class ResultModificationLogViewSet(ListModelMixin, RetrieveModelMixin, GenericVi
     # ]
 
 
+_two_fa_signer = TimestampSigner(salt="2fa-login")
+
+
 class InitialLoginView(APIView):
     permission_classes = [AllowAny]
 
@@ -439,11 +440,14 @@ class InitialLoginView(APIView):
                 {"detail": "Invalid credentials."}, status=status.HTTP_401_UNAUTHORIZED
             )
 
+        login_token = _two_fa_signer.sign(str(user.id))
+
         if not user.is_2fa_enabled or not user.otp_secret:
-            # Setup 2FA for first-time users
+            # Setup 2FA for first-time users. is_2fa_enabled is intentionally
+            # NOT flipped on here - it only becomes true once the user proves
+            # possession of the authenticator by verifying a code below.
             otp_secret = pyotp.random_base32()
             user.otp_secret = otp_secret
-            user.is_2fa_enabled = True
             user.save()
             totp = pyotp.TOTP(otp_secret)
             uri = totp.provisioning_uri(name=user.username, issuer_name="ResultSystem")
@@ -456,14 +460,14 @@ class InitialLoginView(APIView):
                     "detail": "2FA setup required. Scan QR code with your authenticator app.",
                     "otp_secret": otp_secret,
                     "qr_code": f"data:image/png;base64,{qr_code_b64}",
-                    "user_id": user.id,
+                    "login_token": login_token,
                 },
                 status=status.HTTP_202_ACCEPTED,
             )
         else:
             # 2FA required
             return Response(
-                {"detail": "2FA code required.", "user_id": user.id},
+                {"detail": "2FA code required.", "login_token": login_token},
                 status=status.HTTP_202_ACCEPTED,
             )
 
@@ -472,8 +476,16 @@ class TwoFAVerifyView(APIView):
     permission_classes = [AllowAny]
 
     def post(self, request):
-        user_id = request.data.get("user_id")
+        login_token = request.data.get("login_token")
         otp_code = request.data.get("otp_code")
+        try:
+            user_id = _two_fa_signer.unsign(login_token, max_age=300)
+        except (BadSignature, SignatureExpired, TypeError):
+            return Response(
+                {"detail": "Invalid or expired login session."},
+                status=status.HTTP_401_UNAUTHORIZED,
+            )
+
         try:
             user = User.objects.get(id=user_id)
         except User.DoesNotExist:
@@ -486,6 +498,11 @@ class TwoFAVerifyView(APIView):
             return Response(
                 {"detail": "Invalid 2FA code."}, status=status.HTTP_401_UNAUTHORIZED
             )
+
+        if not user.is_2fa_enabled:
+            # First successful verification after setup - now confirmed.
+            user.is_2fa_enabled = True
+            user.save()
 
         refresh = RefreshToken.for_user(user)
         return Response(

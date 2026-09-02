@@ -96,7 +96,6 @@ def send_lecturer_email_for_result_modification(sender, **kwargs):
             context=context,
         )
         message.send([lecturer.email])
-        print("message sent")
     except BadHeaderError:
         logger.warning("BadHeaderError prevented email sending")
     except Exception as e:  # Catch all other errors
@@ -123,16 +122,21 @@ def send_result_notification(sender, instance, created, **kwargs):
 
         if status == "L_D":
             recipient = lecturer
-        if status == "D":
+        elif status == "D":
             recipient = lecturer
-        if status == "P_D":
+        elif status == "P_D":
             recipient = dro
-        if status == "P_F":
+        elif status == "P_F":
             recipient = fro
-        if not lecturer.is_active and status == "C":
-            recipient = dro
+        elif status == "C":
+            recipient = lecturer
         else:
             recipient = lecturer
+
+        # An inactive lecturer can't act on their own notifications - route to
+        # their DRO instead, whatever status would otherwise have gone to them.
+        if recipient == lecturer and not lecturer.is_active:
+            recipient = dro
 
         VERB_MAP = {
             "D": f"{instance.updated_by} returned results for {instance.course.name}",

@@ -11,9 +11,7 @@ class IsResultDraft(permissions.BasePermission):
             return True
         if "status" in request.data:
             current_status = obj.status
-            print(current_status)
             new_status = request.data["status"]
-            print(new_status)
             if current_status != "D":
                 return False
             if new_status != "P_D":
